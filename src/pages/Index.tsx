@@ -208,10 +208,6 @@ const Index = () => {
         </div>
       </section>
 
-          <LearningPathway completedLessons={completedLessons} />
-        </div>
-      </section>
-
       {/* Call to Action */}
       <section className="py-16 px-4 bg-gradient-to-r from-nature-primary to-nature-secondary">
         <div className="max-w-4xl mx-auto text-center">
