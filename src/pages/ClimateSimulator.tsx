@@ -367,6 +367,14 @@ const ClimateSimulator = () => {
               </Button>
             </div>
           </div>
+          <div className="mt-4 flex justify-end">
+            <SoundControls
+              isPlaying={gameSound.isPlaying}
+              volume={gameSound.volume}
+              onToggleSound={gameSound.toggleSound}
+              onVolumeChange={gameSound.changeVolume}
+            />
+          </div>
         </div>
       </div>
 
