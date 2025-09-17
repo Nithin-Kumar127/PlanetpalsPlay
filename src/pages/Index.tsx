@@ -198,22 +198,6 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card 
-              className="hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-br from-green-50 to-blue-50 border-green-200"
-              onClick={() => navigate("/climate-simulator")}
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Climate Simulator</p>
-                    <p className="text-2xl font-bold text-card-foreground">Play Now</p>
-                  </div>
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-500 to-blue-500 text-white animate-bounce-gentle">
-                    <Globe className="h-5 w-5" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
           
           {/* Weather Widget */}
