@@ -12,14 +12,14 @@ export const CustomCursor = () => {
 
     const handleMouseEnter = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
+      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a') || target.closest('[role="button"]')) {
         setIsHovering(true);
       }
     };
 
     const handleMouseLeave = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
+      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a') || target.closest('[role="button"]')) {
         setIsHovering(false);
       }
     };
@@ -44,45 +44,73 @@ export const CustomCursor = () => {
 
   return (
     <>
-      {/* Main cursor */}
+      {/* Main cursor - larger and more visible */}
       <div
-        className={`fixed pointer-events-none z-50 transition-all duration-200 ease-out ${
-          isHovering ? 'scale-150' : 'scale-100'
+        className={`fixed pointer-events-none z-50 transition-all duration-300 ease-out ${
+          isHovering ? 'scale-200' : 'scale-100'
         } ${isClicking ? 'scale-75' : ''}`}
         style={{
-          left: position.x - 10,
-          top: position.y - 10,
+          left: position.x,
+          top: position.y,
           transform: `translate(-50%, -50%)`,
         }}
       >
-        <div className="w-5 h-5 bg-nature-primary rounded-full opacity-80 animate-pulse" />
+        <div className="w-8 h-8 bg-gradient-to-br from-nature-primary to-nature-secondary rounded-full shadow-lg border-2 border-white/50" />
       </div>
 
-      {/* Cursor trail */}
+      {/* Cursor trail - larger and more visible */}
       <div
         className="fixed pointer-events-none z-40 transition-all duration-500 ease-out"
         style={{
-          left: position.x - 15,
-          top: position.y - 15,
+          left: position.x,
+          top: position.y,
           transform: `translate(-50%, -50%)`,
         }}
       >
-        <div className={`w-8 h-8 border-2 border-nature-primary/40 rounded-full ${
-          isHovering ? 'scale-200' : 'scale-100'
-        } transition-transform duration-300`} />
+        <div className={`w-12 h-12 border-3 border-nature-primary/60 rounded-full ${
+          isHovering ? 'scale-250' : 'scale-100'
+        } transition-transform duration-400`} />
       </div>
 
-      {/* Leaf cursor for eco theme */}
+      {/* Outer glow ring */}
+      <div
+        className="fixed pointer-events-none z-35 transition-all duration-700 ease-out"
+        style={{
+          left: position.x,
+          top: position.y,
+          transform: `translate(-50%, -50%)`,
+        }}
+      >
+        <div className={`w-16 h-16 border border-nature-primary/30 rounded-full ${
+          isHovering ? 'scale-300' : 'scale-100'
+        } transition-transform duration-500`} />
+      </div>
+
+      {/* Leaf cursor for eco theme - larger */}
       {isHovering && (
         <div
-          className="fixed pointer-events-none z-45 transition-all duration-200"
+          className="fixed pointer-events-none z-45 transition-all duration-300"
           style={{
-            left: position.x + 15,
-            top: position.y - 15,
+            left: position.x + 20,
+            top: position.y - 20,
             transform: `translate(-50%, -50%)`,
           }}
         >
-          <span className="text-nature-primary text-lg animate-bounce">🍃</span>
+          <span className="text-nature-primary text-2xl animate-bounce drop-shadow-lg">🍃</span>
+        </div>
+      )}
+
+      {/* Click ripple effect */}
+      {isClicking && (
+        <div
+          className="fixed pointer-events-none z-30 animate-ping"
+          style={{
+            left: position.x,
+            top: position.y,
+            transform: `translate(-50%, -50%)`,
+          }}
+        >
+          <div className="w-20 h-20 border-2 border-nature-primary/50 rounded-full" />
         </div>
       )}
     </>

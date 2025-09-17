@@ -155,8 +155,13 @@ All colors MUST be HSL.
     scroll-behavior: smooth;
   }
 
-  /* Interactive elements get pointer cursor back */
-  button, a, [role="button"], input, textarea, select {
+  /* Hide default cursor everywhere */
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+
+  /* Ensure custom cursor is visible on all interactive elements */
+  button, a, [role="button"], input, textarea, select, [data-radix-collection-item] {
     cursor: none !important;
   }
 }
