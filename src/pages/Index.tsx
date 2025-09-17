@@ -13,6 +13,8 @@ import { AchievementBadge } from "@/components/AchievementBadge";
 import { StreakCounter } from "@/components/StreakCounter";
 import { LearningPathway } from "@/components/LearningPathway";
 import { WeatherWidget } from "@/components/WeatherWidget";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
+import { CustomCursor } from "@/components/CustomCursor";
 
 const achievements = [
   { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
@@ -123,6 +125,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ParallaxBackground />
+      <CustomCursor />
+      
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div 
@@ -130,7 +135,7 @@ const Index = () => {
           style={{ backgroundImage: `url(${heroImage})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-nature-primary/80 to-nature-secondary/60" />
-          <div className="relative h-full flex items-center justify-center text-center px-4">
+          <div className="relative h-full flex items-center justify-center text-center px-4 z-10">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
                 Learn Climate Science
@@ -141,7 +146,7 @@ const Index = () => {
               </p>
               <Button 
                 size="lg" 
-                className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg animate-bounce-gentle"
+                className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg animate-bounce-gentle hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
                 onClick={() => navigate("/games")}
               >
                 Start Learning <Leaf className="ml-2 h-5 w-5" />
@@ -152,7 +157,7 @@ const Index = () => {
       </section>
 
       {/* Stats Dashboard */}
-      <section className="py-8 px-4 bg-secondary/50">
+      <section className="py-8 px-4 bg-secondary/50 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             <ProgressStats 
@@ -208,14 +213,14 @@ const Index = () => {
       </section>
 
       {/* Learning Paths */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           <LearningPathway completedLessons={completedLessons} />
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 px-4 bg-gradient-to-r from-nature-primary to-nature-secondary">
+      <section className="py-16 px-4 bg-gradient-to-r from-nature-primary to-nature-secondary relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Make a Difference?
@@ -225,7 +230,7 @@ const Index = () => {
           </p>
           <Button 
             size="lg" 
-            className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg"
+            className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl"
             onClick={() => navigate("/games")}
           >
             Explore Games <Gamepad2 className="ml-2 h-5 w-5" />
