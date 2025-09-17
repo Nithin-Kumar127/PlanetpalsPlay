@@ -42,6 +42,15 @@ export const Header = () => {
 
               <Button
                 variant="ghost"
+                onClick={() => navigate('/climate-simulator')}
+                className="hidden sm:flex"
+              >
+                <Globe className="h-4 w-4 mr-2" />
+                Simulator
+              </Button>
+
+              <Button
+                variant="ghost"
                 onClick={() => navigate('/achievements')}
                 className="hidden sm:flex"
               >
@@ -84,6 +93,10 @@ export const Header = () => {
                   <DropdownMenuItem onClick={() => navigate('/game')}>
                     <Gamepad2 className="mr-2 h-4 w-4" />
                     Quiz Game
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/climate-simulator')}>
+                    <Globe className="mr-2 h-4 w-4" />
+                    Climate Simulator
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/achievements')}>
                     <Award className="mr-2 h-4 w-4" />

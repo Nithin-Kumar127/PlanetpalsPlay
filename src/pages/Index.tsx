@@ -12,6 +12,7 @@ import { ProgressStats } from "@/components/ProgressStats";
 import { AchievementBadge } from "@/components/AchievementBadge";
 import { StreakCounter } from "@/components/StreakCounter";
 import { LearningPathway } from "@/components/LearningPathway";
+import { WeatherWidget } from "@/components/WeatherWidget";
 
 const achievements = [
   { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
@@ -153,7 +154,7 @@ const Index = () => {
       {/* Stats Dashboard */}
       <section className="py-8 px-4 bg-secondary/50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             <ProgressStats 
               title="Total XP" 
               value={totalXP.toLocaleString()} 
@@ -197,6 +198,27 @@ const Index = () => {
                 </div>
               </CardContent>
             </Card>
+            <Card 
+              className="hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-br from-green-50 to-blue-50 border-green-200"
+              onClick={() => navigate("/climate-simulator")}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Climate Simulator</p>
+                    <p className="text-2xl font-bold text-card-foreground">Play Now</p>
+                  </div>
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-500 to-blue-500 text-white animate-bounce-gentle">
+                    <Globe className="h-5 w-5" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Weather Widget */}
+          <div className="mt-6">
+            <WeatherWidget />
           </div>
         </div>
       </section>

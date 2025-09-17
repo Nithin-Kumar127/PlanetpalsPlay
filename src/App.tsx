@@ -17,6 +17,7 @@ import Achievements from "./pages/Achievements";
 import Profile from "./pages/Profile";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
+import ClimateSimulator from "./pages/ClimateSimulator";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +94,15 @@ const App = () => {
                 <ProtectedRoute>
                   <Header />
                   <Leaderboard />
+                  <ChatBot 
+                    isOpen={isChatBotOpen} 
+                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="/climate-simulator" element={
+                <ProtectedRoute>
+                  <ClimateSimulator />
                   <ChatBot 
                     isOpen={isChatBotOpen} 
                     onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
