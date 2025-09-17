@@ -744,7 +744,6 @@ const LessonDetail = () => {
         icon: Brain
       }
     ]
-  }
-};
+  },
 
 export default LessonDetail;
