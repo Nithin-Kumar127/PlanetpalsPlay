@@ -42,15 +42,6 @@ export const Header = () => {
 
               <Button
                 variant="ghost"
-                onClick={() => navigate('/climate-simulator')}
-                className="hidden sm:flex"
-              >
-                <Globe className="h-4 w-4 mr-2" />
-                Simulator
-              </Button>
-
-              <Button
-                variant="ghost"
                 onClick={() => navigate('/achievements')}
                 className="hidden sm:flex"
               >
