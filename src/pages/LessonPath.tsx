@@ -96,7 +96,32 @@ const LessonPath = () => {
   };
 
   const startLesson = (lessonId: number) => {
-    navigate(`/lesson/${lessonId}`);
+    // Map lesson IDs to the actual lesson content
+    const lessonMap: Record<number, string> = {
+      1: "1", // What is Climate Change?
+      2: "2", // The Greenhouse Effect  
+      3: "3", // Carbon Footprint Basics
+      4: "4", // Global Temperature Trends
+      5: "5", // Ice Caps and Sea Levels
+      6: "1", // Map other lessons to available content for now
+      7: "2",
+      8: "3",
+      9: "1",
+      10: "2",
+      11: "3",
+      12: "1",
+      13: "2",
+      14: "3",
+      15: "1",
+      16: "2",
+      17: "3",
+      18: "1",
+      19: "2",
+      20: "3"
+    };
+    
+    const mappedLessonId = lessonMap[lessonId] || "1";
+    navigate(`/lesson/${mappedLessonId}`);
   };
 
   return (
