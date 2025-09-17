@@ -5,54 +5,24 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useLearning } from "@/contexts/LearningContext";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { 
-    profile, 
-    lessonsCompleted, 
-    userAchievements, 
-    totalXP, 
-    currentStreak, 
-    loading 
-  } = useLearning();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-nature-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!profile) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-muted-foreground">Profile not found</p>
-        </div>
-      </div>
-    );
-  }
 
   const userStats = {
-    name: profile.name || "Climate Learner",
-    joinDate: new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-    totalXP: totalXP,
-    currentStreak: currentStreak,
-    bestStreak: profile.best_streak,
-    lessonsCompleted: lessonsCompleted,
-    achievementsEarned: userAchievements.length,
-    averageScore: 87, // Could be calculated from lesson progress
-    timeSpent: "12 hours", // Could be calculated from daily activity
-    level: profile.level,
-    xpToNextLevel: (profile.level * 500) - totalXP,
-    currentLevelXP: totalXP,
-    nextLevelXP: profile.level * 500
+    name: "Climate Learner",
+    joinDate: "January 2024",
+    totalXP: 1250,
+    currentStreak: 7,
+    bestStreak: 15,
+    lessonsCompleted: 17,
+    achievementsEarned: 2,
+    averageScore: 87,
+    timeSpent: "12 hours",
+    level: 3,
+    xpToNextLevel: 250,
+    currentLevelXP: 750,
+    nextLevelXP: 2000
   };
 
   const recentActivity = [

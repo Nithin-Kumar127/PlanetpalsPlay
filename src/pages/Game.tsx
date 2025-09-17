@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useLearning } from "@/contexts/LearningContext";
 
 interface Question {
   id: number;
@@ -21,7 +20,6 @@ interface Question {
 const Game = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { saveQuizAttempt } = useLearning();
   
   const [gameState, setGameState] = useState<'menu' | 'playing' | 'finished'>('menu');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -182,17 +180,9 @@ const Game = () => {
       setCurrentQuestion(prev => prev + 1);
       setSelectedAnswer(null);
       setShowResult(false);
+      setTimeLeft(gameMode === 'quick' ? 20 : 30);
     } else {
       setGameState('finished');
-      
-      // Save quiz attempt to database
-      saveQuizAttempt(
-        gameMode,
-        score,
-        gameQuestions.length,
-        gameQuestions.filter((_, index) => index < currentQuestion || (index === currentQuestion && selectedAnswer === gameQuestions[currentQuestion].correct)).length,
-        (gameQuestions.length * (gameMode === 'quick' ? 20 : 30)) - timeLeft
-      );
     }
   };
 
