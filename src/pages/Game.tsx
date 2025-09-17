@@ -6,8 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useGameSound } from "@/hooks/useGameSound";
-import { SoundControls } from "@/components/ui/sound-controls";
 
 interface Question {
   id: number;
@@ -182,7 +180,6 @@ const Game = () => {
       setCurrentQuestion(prev => prev + 1);
       setSelectedAnswer(null);
       setShowResult(false);
-      setTimeLeft(gameMode === 'quick' ? 20 : 30);
     } else {
       setGameState('finished');
     }
@@ -303,14 +300,6 @@ const Game = () => {
                 <p className="text-sm text-muted-foreground">Get bonus points for speed and difficulty</p>
               </div>
               <div className="space-y-2">
-                <div className="w-12 h-12 bg-nature-primary rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-white font-bold">3</span>
-                </div>
-                <h3 className="font-semibold">Build Streaks</h3>
-                <p className="text-sm text-muted-foreground">Answer consecutively for streak bonuses</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );

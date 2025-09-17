@@ -6,8 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { SoundControls } from "@/components/ui/sound-controls";
-import { useGameSound } from "@/hooks/useGameSound";
 
 interface GameItem {
   id: string;
@@ -410,14 +408,6 @@ const EcoMatchGame = () => {
             </div>
           </div>
           <Progress value={progress} className="mt-4 h-2 bg-white/20" />
-          <div className="mt-4 flex justify-end">
-            <SoundControls
-              isPlaying={gameSound.isPlaying}
-              volume={gameSound.volume}
-              onToggleSound={gameSound.toggleSound}
-              onVolumeChange={gameSound.changeVolume}
-            />
-          </div>
         </div>
       </div>
 

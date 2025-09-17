@@ -6,8 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { SoundControls } from "@/components/ui/sound-controls";
-import { useGameSound } from "@/hooks/useGameSound";
 
 interface GameState {
   year: number;
@@ -368,14 +366,6 @@ const ClimateSimulator = () => {
                 <RotateCcw className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-          <div className="mt-4 flex justify-end">
-            <SoundControls
-              isPlaying={gameSound.isPlaying}
-              volume={gameSound.volume}
-              onToggleSound={gameSound.toggleSound}
-              onVolumeChange={gameSound.changeVolume}
-            />
           </div>
         </div>
       </div>
