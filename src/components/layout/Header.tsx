@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useNavigate } from 'react-router-dom'
-import { User, LogOut, Award, Leaf, Gamepad2, Trophy } from 'lucide-react'
+import { User, LogOut, Award, Leaf, Gamepad2, Trophy, Globe } from 'lucide-react'
 
 export const Header = () => {
   const { user, signOut } = useAuth()
