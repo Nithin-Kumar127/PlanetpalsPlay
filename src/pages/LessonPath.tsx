@@ -107,17 +107,8 @@ const LessonPath = () => {
   };
 
   const startLesson = (lessonId: number) => {
-    // For Climate Basics category, use direct mapping
-    if (categoryId === "1") {
-      navigate(`/lesson/${lessonId}`);
-    } else {
-      // For other categories, show coming soon message
-      toast({
-        title: "Coming Soon! 🚧",
-        description: "This lesson is under development. Try the Climate Basics lessons first!",
-        variant: "destructive"
-      });
-    }
+    // All lessons are now available
+    navigate(`/lesson/${lessonId}`);
   };
 
   return (
