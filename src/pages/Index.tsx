@@ -33,6 +33,30 @@ const Index = () => {
     return Math.round((completed / categoryLessons.length) * 100);
   };
 
+  const isCategoryUnlocked = (categoryId: number) => {
+    if (categoryId === 1) return true; // Climate Basics always unlocked
+    
+    // Check if previous category is completed
+    const previousCategoryLessons = lessonCategories[categoryId - 2].totalLessons;
+    const previousCategoryIds = [];
+    
+    // Get lesson IDs for previous category
+    for (let i = 0; i < categoryId - 1; i++) {
+      const startId = i * 5 + 1; // Each category has 5 lessons starting from 1, 6, 11, 16
+      for (let j = 0; j < lessonCategories[i].totalLessons; j++) {
+        previousCategoryIds.push(startId + j);
+      }
+    }
+    
+    const lastCategoryStart = (categoryId - 2) * 5 + 1;
+    const lastCategoryIds = [];
+    for (let i = 0; i < lessonCategories[categoryId - 2].totalLessons; i++) {
+      lastCategoryIds.push(lastCategoryStart + i);
+    }
+    
+    return lastCategoryIds.every(id => completedLessons.includes(id));
+  };
+
   const lessonCategories = [
     {
       id: 1,
@@ -44,39 +68,43 @@ const Index = () => {
       totalLessons: 5,
       difficulty: "Beginner",
       color: "bg-gradient-to-br from-blue-500 to-cyan-400",
+      unlocked: true,
     },
     {
       id: 2,
       title: "Renewable Energy",
       description: "Solar, wind, and sustainable power sources",
       icon: Zap,
-      progress: 0,
-      lessonsCompleted: 0,
+      progress: calculateProgress([6, 7, 8, 9, 10]),
+      lessonsCompleted: [6, 7, 8, 9, 10].filter(id => completedLessons.includes(id)).length,
       totalLessons: 10,
       difficulty: "Intermediate", 
       color: "bg-gradient-to-br from-yellow-500 to-orange-400",
+      unlocked: isCategoryUnlocked(2),
     },
     {
       id: 3,
       title: "Waste Management",
       description: "Recycling, composting, and reducing waste",
       icon: Target,
-      progress: 0,
-      lessonsCompleted: 0,
+      progress: calculateProgress([11, 12, 13, 14, 15]),
+      lessonsCompleted: [11, 12, 13, 14, 15].filter(id => completedLessons.includes(id)).length,
       totalLessons: 10,
       difficulty: "Beginner",
       color: "bg-gradient-to-br from-green-500 to-emerald-400",
+      unlocked: isCategoryUnlocked(3),
     },
     {
       id: 4,
       title: "Ecosystem Protection",
       description: "Biodiversity, conservation, and habitat preservation",
       icon: Leaf,
-      progress: 0,
-      lessonsCompleted: 0,
+      progress: calculateProgress([16, 17, 18, 19, 20]),
+      lessonsCompleted: [16, 17, 18, 19, 20].filter(id => completedLessons.includes(id)).length,
       totalLessons: 12,
       difficulty: "Advanced",
       color: "bg-gradient-to-br from-emerald-600 to-green-500",
+      unlocked: isCategoryUnlocked(4),
     },
   ];
 
@@ -183,7 +211,14 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             {lessonCategories.map((category, index) => (
               <div key={category.id} className="animate-slide-up" style={{ animationDelay: `${index * 150}ms` }}>
-                <LessonCard {...category} onStartLearning={() => navigate(`/lessons/${category.id}`)} />
+                <LessonCard 
+                  {...category} 
+                  onStartLearning={() => {
+                    if (category.unlocked) {
+                      navigate(`/lessons/${category.id}`)
+                    }
+                  }} 
+                />
               </div>
             ))}
           </div>

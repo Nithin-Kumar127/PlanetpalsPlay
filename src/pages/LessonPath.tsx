@@ -87,8 +87,22 @@ const LessonPath = () => {
   }
 
   const isLessonUnlocked = (lessonId: number, index: number) => {
-    if (index === 0) return true; // First lesson is always unlocked
-    // Check if previous lesson is completed
+    // First lesson of Climate Basics is always unlocked
+    if (categoryId === "1" && index === 0) return true;
+    
+    // For other categories, check if previous category is completed
+    if (categoryId !== "1") {
+      const previousCategoryId = (parseInt(categoryId) - 1).toString();
+      const previousCategory = categories[previousCategoryId as keyof typeof categories];
+      if (previousCategory) {
+        const previousCategoryLessons = previousCategory.lessons.map(l => l.id);
+        const previousCategoryCompleted = previousCategoryLessons.every(id => completedLessons.includes(id));
+        if (!previousCategoryCompleted) return false;
+      }
+    }
+    
+    // Within the same category, check if previous lesson is completed
+    if (index === 0) return true; // First lesson of unlocked category
     const previousLessonId = category.lessons[index - 1].id;
     return completedLessons.includes(previousLessonId);
   };

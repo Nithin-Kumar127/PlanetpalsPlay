@@ -15,6 +15,7 @@ interface LessonCardProps {
   totalLessons: number;
   difficulty: string;
   color: string;
+  unlocked: boolean;
   onStartLearning?: () => void;
 }
 
@@ -27,9 +28,9 @@ export const LessonCard = ({
   totalLessons,
   difficulty,
   color,
+  unlocked,
   onStartLearning,
 }: LessonCardProps) => {
-  const isLocked = progress === 0 && lessonsCompleted === 0;
   
   const difficultyColors = {
     Beginner: "bg-success text-success-foreground",
@@ -38,10 +39,12 @@ export const LessonCard = ({
   };
 
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02] overflow-hidden">
+    <Card className={`group transition-all duration-300 overflow-hidden ${
+      unlocked ? 'hover:shadow-lg hover:scale-[1.02]' : 'opacity-60'
+    }`}>
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
-          <div className={`p-3 rounded-xl ${color} text-white`}>
+          <div className={`p-3 rounded-xl ${unlocked ? color : 'bg-muted'} text-white`}>
             <Icon className="h-6 w-6" />
           </div>
           <Badge className={difficultyColors[difficulty as keyof typeof difficultyColors]}>
@@ -49,10 +52,12 @@ export const LessonCard = ({
           </Badge>
         </div>
         <div className="space-y-2">
-          <h3 className="text-xl font-semibold text-card-foreground group-hover:text-nature-primary transition-colors">
+          <h3 className={`text-xl font-semibold transition-colors ${
+            unlocked ? 'text-card-foreground group-hover:text-nature-primary' : 'text-muted-foreground'
+          }`}>
             {title}
           </h3>
-          <p className="text-muted-foreground text-sm">
+          <p className={`text-sm ${unlocked ? 'text-muted-foreground' : 'text-muted-foreground/60'}`}>
             {description}
           </p>
         </div>
@@ -64,22 +69,22 @@ export const LessonCard = ({
             <span className="text-muted-foreground">Progress</span>
             <span className="font-medium">{lessonsCompleted}/{totalLessons} lessons</span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={unlocked ? progress : 0} className="h-2" />
           <div className="text-xs text-muted-foreground">
-            {progress}% complete
+            {unlocked ? progress : 0}% complete
           </div>
         </div>
         
         <Button 
           className="w-full" 
-          variant={isLocked ? "secondary" : "default"}
-          disabled={isLocked}
+          variant={!unlocked ? "secondary" : "default"}
+          disabled={!unlocked}
           onClick={onStartLearning}
         >
-          {isLocked ? (
+          {!unlocked ? (
             <>
               <Lock className="mr-2 h-4 w-4" />
-              Complete previous lessons
+              Complete previous category
             </>
           ) : progress === 100 ? (
             <>
