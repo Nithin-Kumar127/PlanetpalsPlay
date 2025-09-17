@@ -6,74 +6,32 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useLearning } from "@/contexts/LearningContext";
 
 const LessonPath = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+  const { 
+    lessons, 
+    categories, 
+    completedLessonIds, 
+    loading 
+  } = useLearning();
 
-  useEffect(() => {
-    // Load completed lessons from localStorage
-    const saved = localStorage.getItem('completedLessons');
-    if (saved) {
-      setCompletedLessons(JSON.parse(saved));
-    }
-  }, []);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-nature-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading lessons...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const categories = {
-    "1": {
-      title: "Climate Basics",
-      description: "Understanding greenhouse gases and global warming",
-      color: "from-blue-500 to-cyan-400",
-      lessons: [
-        { id: 1, title: "What is Climate Change?", xp: 50, difficulty: "Easy" },
-        { id: 2, title: "The Greenhouse Effect", xp: 75, difficulty: "Easy" },
-        { id: 3, title: "Carbon Footprint Basics", xp: 100, difficulty: "Medium" },
-        { id: 4, title: "Global Temperature Trends", xp: 125, difficulty: "Medium" },
-        { id: 5, title: "Ice Caps and Sea Levels", xp: 150, difficulty: "Hard" },
-      ]
-    },
-    "2": {
-      title: "Renewable Energy",
-      description: "Solar, wind, and sustainable power sources",
-      color: "from-yellow-500 to-orange-400",
-      lessons: [
-        { id: 6, title: "Solar Power Fundamentals", xp: 75, difficulty: "Easy" },
-        { id: 7, title: "Wind Energy Systems", xp: 100, difficulty: "Medium" },
-        { id: 8, title: "Hydroelectric Power", xp: 125, difficulty: "Medium" },
-        { id: 9, title: "Geothermal Energy", xp: 150, difficulty: "Hard" },
-        { id: 10, title: "Energy Storage Solutions", xp: 200, difficulty: "Hard" },
-      ]
-    },
-    "3": {
-      title: "Waste Management",
-      description: "Recycling, composting, and reducing waste",
-      color: "from-green-500 to-emerald-400",
-      lessons: [
-        { id: 11, title: "The 3 R's: Reduce, Reuse, Recycle", xp: 50, difficulty: "Easy" },
-        { id: 12, title: "Composting at Home", xp: 75, difficulty: "Easy" },
-        { id: 13, title: "Plastic Pollution Solutions", xp: 100, difficulty: "Medium" },
-        { id: 14, title: "Circular Economy Principles", xp: 150, difficulty: "Hard" },
-        { id: 15, title: "Zero Waste Lifestyle", xp: 200, difficulty: "Hard" },
-      ]
-    },
-    "4": {
-      title: "Ecosystem Protection",
-      description: "Biodiversity, conservation, and habitat preservation",
-      color: "from-emerald-600 to-green-500",
-      lessons: [
-        { id: 16, title: "Biodiversity Basics", xp: 100, difficulty: "Medium" },
-        { id: 17, title: "Forest Conservation", xp: 125, difficulty: "Medium" },
-        { id: 18, title: "Ocean Protection", xp: 150, difficulty: "Hard" },
-        { id: 19, title: "Wildlife Corridors", xp: 175, difficulty: "Hard" },
-        { id: 20, title: "Sustainable Agriculture", xp: 200, difficulty: "Hard" },
-      ]
-    }
-  };
-
-  const category = categories[categoryId as keyof typeof categories];
+  const category = categories.find(c => c.id.toString() === categoryId);
+  const categoryLessons = lessons.filter(l => l.category_id.toString() === categoryId);
 
   if (!category) {
     return (
@@ -92,23 +50,21 @@ const LessonPath = () => {
     
     // For other categories, check if previous category is completed
     if (categoryId !== "1") {
-      const previousCategoryId = (parseInt(categoryId) - 1).toString();
-      const previousCategory = categories[previousCategoryId as keyof typeof categories];
-      if (previousCategory) {
-        const previousCategoryLessons = previousCategory.lessons.map(l => l.id);
-        const previousCategoryCompleted = previousCategoryLessons.every(id => completedLessons.includes(id));
-        if (!previousCategoryCompleted) return false;
-      }
+      const previousCategoryId = parseInt(categoryId) - 1;
+      const previousCategoryLessons = lessons.filter(l => l.category_id === previousCategoryId);
+      const previousCategoryLessonIds = previousCategoryLessons.map(l => l.id);
+      const previousCategoryCompleted = previousCategoryLessonIds.every(id => completedLessonIds.includes(id));
+      if (!previousCategoryCompleted) return false;
     }
     
     // Within the same category, check if previous lesson is completed
     if (index === 0) return true; // First lesson of unlocked category
-    const previousLessonId = category.lessons[index - 1].id;
-    return completedLessons.includes(previousLessonId);
+    const previousLessonId = categoryLessons[index - 1].id;
+    return completedLessonIds.includes(previousLessonId);
   };
 
   const isLessonCompleted = (lessonId: number) => {
-    return completedLessons.includes(lessonId);
+    return completedLessonIds.includes(lessonId);
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -142,15 +98,15 @@ const LessonPath = () => {
           <p className="text-xl opacity-90">{category.description}</p>
           <div className="mt-4">
             <Progress 
-              value={(completedLessons.filter(id => 
-                category.lessons.some(lesson => lesson.id === id)
-              ).length / category.lessons.length) * 100} 
+              value={(completedLessonIds.filter(id => 
+                categoryLessons.some(lesson => lesson.id === id)
+              ).length / categoryLessons.length) * 100}
               className="h-3 bg-white/20"
             />
             <p className="text-sm mt-2 opacity-80">
-              {completedLessons.filter(id => 
-                category.lessons.some(lesson => lesson.id === id)
-              ).length} of {category.lessons.length} lessons completed
+              {completedLessonIds.filter(id => 
+                categoryLessons.some(lesson => lesson.id === id)
+              ).length} of {categoryLessons.length} lessons completed
             </p>
           </div>
         </div>
@@ -159,7 +115,7 @@ const LessonPath = () => {
       {/* Lessons List */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-4">
-          {category.lessons.map((lesson, index) => {
+          {categoryLessons.map((lesson, index) => {
             const unlocked = isLessonUnlocked(lesson.id, index);
             const completed = isLessonCompleted(lesson.id);
 
@@ -197,7 +153,7 @@ const LessonPath = () => {
                           </Badge>
                           <div className="flex items-center text-sm text-muted-foreground">
                             <Star className="h-3 w-3 mr-1" />
-                            {lesson.xp} XP
+                            {lesson.xp_reward} XP
                           </div>
                         </div>
                       </div>

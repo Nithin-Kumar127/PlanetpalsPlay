@@ -1,125 +1,38 @@
 import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { Leaf, Award, Zap, Globe, Target, BookOpen, TrendingUp, Gamepad2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { LessonCard } from "@/components/LessonCard";
 import { ProgressStats } from "@/components/ProgressStats";
-import { AchievementBadge } from "@/components/AchievementBadge";
 import { StreakCounter } from "@/components/StreakCounter";
 import { LearningPathway } from "@/components/LearningPathway";
 import { WeatherWidget } from "@/components/WeatherWidget";
-
-const achievements = [
-  { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
-  { id: 2, name: "Week Warrior", description: "7-day learning streak", icon: Award, earned: true },
-  { id: 3, name: "Climate Champion", description: "Complete 50 lessons", icon: Globe, earned: false },
-  { id: 4, name: "Energy Expert", description: "Master renewable energy", icon: Zap, earned: false },
-];
-
-const baseLessonCategories = [
-  {
-    id: 1,
-    title: "Climate Basics",
-    description: "Understanding greenhouse gases and global warming",
-    icon: Globe,
-    totalLessons: 5,
-    difficulty: "Beginner",
-    color: "bg-gradient-to-br from-blue-500 to-cyan-400",
-    unlocked: true,
-  },
-  {
-    id: 2,
-    title: "Renewable Energy",
-    description: "Solar, wind, and sustainable power sources",
-    icon: Zap,
-    totalLessons: 5,
-    difficulty: "Intermediate", 
-    color: "bg-gradient-to-br from-yellow-500 to-orange-400",
-    unlocked: false,
-  },
-  {
-    id: 3,
-    title: "Waste Management",
-    description: "Recycling, composting, and reducing waste",
-    icon: Target,
-    totalLessons: 5,
-    difficulty: "Beginner",
-    color: "bg-gradient-to-br from-green-500 to-emerald-400",
-    unlocked: false,
-  },
-  {
-    id: 4,
-    title: "Ecosystem Protection",
-    description: "Biodiversity, conservation, and habitat preservation",
-    icon: Leaf,
-    totalLessons: 5,
-    difficulty: "Advanced",
-    color: "bg-gradient-to-br from-emerald-600 to-green-500",
-    unlocked: false,
-  },
-];
+import { useLearning } from "@/contexts/LearningContext";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [currentStreak, setCurrentStreak] = useState(7);
-  const [totalXP, setTotalXP] = useState(1250);
-  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
-
-  useEffect(() => {
-    // Load completed lessons from localStorage
-    const saved = localStorage.getItem('completedLessons');
-    if (saved) {
-      setCompletedLessons(JSON.parse(saved));
-    }
-  }, []);
+  const { 
+    totalXP, 
+    currentStreak, 
+    lessonsCompleted, 
+    completedLessonIds, 
+    userAchievements,
+    loading 
+  } = useLearning();
 
   // Use a placeholder image from Pexels instead of local import
   const heroImage = "https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-  
-  const calculateProgress = (categoryLessons: number[]) => {
-    const completed = categoryLessons.filter(id => completedLessons.includes(id)).length;
-    return Math.round((completed / categoryLessons.length) * 100);
-  };
 
-  const isCategoryUnlocked = (categoryId: number): boolean => {
-    if (categoryId === 1) return true; // Climate Basics always unlocked
-    
-    // Check if all lessons from previous category are completed
-    const previousCategoryIndex = categoryId - 2;
-    if (previousCategoryIndex < 0 || previousCategoryIndex >= baseLessonCategories.length) return false;
-    
-    const previousCategory = baseLessonCategories[previousCategoryIndex];
-    const previousCategoryStart = (categoryId - 2) * 5 + 1;
-    const previousCategoryLessonIds = [];
-    
-    for (let i = 0; i < previousCategory.totalLessons; i++) {
-      previousCategoryLessonIds.push(previousCategoryStart + i);
-    }
-    
-    return previousCategoryLessonIds.every(id => completedLessons.includes(id));
-  };
-
-  const lessonCategories = React.useMemo(() => {
-    return baseLessonCategories.map((category) => {
-      const startLessonId = (category.id - 1) * 5 + 1;
-      const categoryLessonIds = [];
-      for (let i = 0; i < category.totalLessons; i++) {
-        categoryLessonIds.push(startLessonId + i);
-      }
-      
-      return {
-        ...category,
-        progress: calculateProgress(categoryLessonIds),
-        lessonsCompleted: categoryLessonIds.filter(id => completedLessons.includes(id)).length,
-        unlocked: category.id === 1 ? true : isCategoryUnlocked(category.id),
-      };
-    });
-  }, [completedLessons]);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-nature-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading your learning data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -157,20 +70,20 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             <ProgressStats 
               title="Total XP" 
-              value={totalXP.toLocaleString()} 
+              value={totalXP.toLocaleString()}
               icon={TrendingUp}
               color="text-nature-primary"
             />
             <ProgressStats 
               title="Lessons Completed" 
-              value={completedLessons.length.toString()}
+              value={lessonsCompleted.toString()}
               icon={BookOpen}
               color="text-accent"
             />
             <StreakCounter streak={currentStreak} onClick={() => navigate("/profile")} />
             <ProgressStats 
               title="Achievements" 
-              value={`${achievements.filter(a => a.earned).length}/${achievements.length}`}
+              value={`${userAchievements.length}/8`}
               icon={Award}
               color="text-warning"
               onClick={() => navigate("/achievements")}
@@ -210,7 +123,7 @@ const Index = () => {
       {/* Learning Paths */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <LearningPathway completedLessons={completedLessons} />
+          <LearningPathway completedLessons={completedLessonIds} />
         </div>
       </section>
 

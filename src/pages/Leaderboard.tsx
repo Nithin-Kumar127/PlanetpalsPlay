@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface LeaderboardUser {
   id: string;
@@ -24,25 +25,34 @@ interface LeaderboardUser {
 const Leaderboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { profile, lessonsCompleted, currentStreak, totalXP, loading } = useLearning();
   const [currentUserStats, setCurrentUserStats] = useState<LeaderboardUser | null>(null);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-nature-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading leaderboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   useEffect(() => {
-    // Get current user's completed lessons
-    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
-    
     // Create current user stats
     const userStats: LeaderboardUser = {
       id: user?.id || '1',
-      name: user?.user_metadata?.name || 'Climate Learner',
+      name: profile?.name || user?.user_metadata?.name || 'Climate Learner',
       email: user?.email || 'you@example.com',
-      xp: 1250 + (completedLessons.length * 100), // Base XP + lesson XP
-      lessonsCompleted: completedLessons.length,
-      currentStreak: 7,
-      bestStreak: 15,
-      joinDate: '2024-01-15',
-      level: Math.floor((1250 + (completedLessons.length * 100)) / 500) + 1,
-      achievements: completedLessons.length >= 1 ? (completedLessons.length >= 5 ? 3 : 2) : 1
+      xp: totalXP,
+      lessonsCompleted: lessonsCompleted,
+      currentStreak: currentStreak,
+      bestStreak: profile?.best_streak || 0,
+      joinDate: profile?.created_at ? new Date(profile.created_at).toISOString().split('T')[0] : '2024-01-15',
+      level: profile?.level || 1,
+      achievements: Math.min(lessonsCompleted, 8) // Estimate based on lessons
     };
 
     setCurrentUserStats(userStats);
@@ -161,7 +171,7 @@ const Leaderboard = () => {
     ];
 
     setLeaderboardData(mockUsers);
-  }, [user]);
+  }, [user, profile, lessonsCompleted, currentStreak, totalXP]);
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
