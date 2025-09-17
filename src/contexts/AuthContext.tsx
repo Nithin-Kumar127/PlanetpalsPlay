@@ -27,14 +27,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     console.log('AuthProvider: Initializing auth state')
     
+    // Check for existing session in localStorage
+    const checkExistingSession = () => {
+      try {
+        const sessionData = localStorage.getItem('mockSession')
+        if (sessionData) {
+          const session = JSON.parse(sessionData)
+          console.log('Found existing session:', session.user.email)
+          setUser(session.user)
+          setLoading(false)
+          return true
+        }
+      } catch (error) {
+        console.error('Error loading existing session:', error)
+        localStorage.removeItem('mockSession')
+      }
+      return false
+    }
+
     // Get initial session
     const initializeAuth = async () => {
+      // First check localStorage
+      if (checkExistingSession()) {
+        return
+      }
+
       try {
         const { data: { session }, error } = await supabase.auth.getSession()
         console.log('Initial session:', session, 'Error:', error)
         
         if (session?.user) {
           setUser(session.user)
+          // Save session to localStorage
+          localStorage.setItem('mockSession', JSON.stringify(session))
           console.log('User found in session:', session.user.email)
         } else {
           setUser(null)
@@ -58,9 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
           if (session?.user) {
             setUser(session.user)
+            // Save session to localStorage
+            localStorage.setItem('mockSession', JSON.stringify(session))
             console.log('User signed in:', session.user.email)
           } else {
             setUser(null)
+            // Remove session from localStorage
+            localStorage.removeItem('mockSession')
             console.log('User signed out')
           }
         } catch (error) {
@@ -79,6 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, name: string) => {
     console.log('AuthProvider: Attempting signup for:', email)
+    setLoading(true)
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -92,19 +122,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error('Signup error:', error)
+        setLoading(false)
         return { error }
       }
       
       console.log('Signup successful:', data?.user?.email)
+      // Don't set loading to false here, let the auth state change handle it
       return { error: null }
     } catch (err) {
       console.error('Signup exception:', err)
+      setLoading(false)
       return { error: err }
     }
   }
 
   const signIn = async (email: string, password: string) => {
     console.log('AuthProvider: Attempting signin for:', email)
+    setLoading(true)
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -113,13 +147,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error('Signin error:', error)
+        setLoading(false)
         return { error }
       }
       
       console.log('Signin successful:', data?.user?.email)
+      // Don't set loading to false here, let the auth state change handle it
       return { error: null }
     } catch (err) {
       console.error('Signin exception:', err)
+      setLoading(false)
       return { error: err }
     }
   }

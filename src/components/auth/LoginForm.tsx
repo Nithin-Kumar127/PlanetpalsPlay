@@ -51,13 +51,16 @@ export const LoginForm = ({ onSwitchToSignup }: LoginFormProps) => {
           description: error.message || 'Invalid email or password',
           variant: 'destructive'
         })
+        setIsLoading(false)
       } else {
         toast({
           title: 'Welcome back!',
           description: 'You have successfully logged in.'
         })
-        // Navigate to intended destination or home
-        navigate(from, { replace: true })
+        // Wait a moment for auth state to update, then navigate
+        setTimeout(() => {
+          navigate(from, { replace: true })
+        }, 100)
       }
     } catch (error) {
       toast({
@@ -65,8 +68,10 @@ export const LoginForm = ({ onSwitchToSignup }: LoginFormProps) => {
         description: 'An unexpected error occurred',
         variant: 'destructive'
       })
-    } finally {
       setIsLoading(false)
+    } finally {
+      // Don't set loading to false here if login was successful
+      // Let the navigation handle it
     }
   }
 

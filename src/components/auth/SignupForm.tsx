@@ -56,13 +56,16 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
           description: error.message || 'Failed to create account',
           variant: 'destructive'
         })
+        setIsLoading(false)
       } else {
         toast({
           title: 'Account Created!',
           description: 'Welcome to EcoLearn! You can now start your climate learning journey.'
         })
-        // Navigate to intended destination or home
-        navigate(from, { replace: true })
+        // Wait a moment for auth state to update, then navigate
+        setTimeout(() => {
+          navigate(from, { replace: true })
+        }, 100)
       }
     } catch (error) {
       toast({
@@ -70,8 +73,10 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
         description: 'An unexpected error occurred',
         variant: 'destructive'
       })
-    } finally {
       setIsLoading(false)
+    } finally {
+      // Don't set loading to false here if signup was successful
+      // Let the navigation handle it
     }
   }
 

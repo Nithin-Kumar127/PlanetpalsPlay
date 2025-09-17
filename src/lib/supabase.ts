@@ -86,7 +86,7 @@ const createMockSupabaseClient = () => {
               console.error('Error in auth listener:', e)
             }
           })
-        }, 100)
+        }, 50)
         
         return { 
           data: { 
@@ -134,7 +134,7 @@ const createMockSupabaseClient = () => {
               console.error('Error in auth listener:', e)
             }
           })
-        }, 100)
+        }, 50)
         
         return { 
           data: { 
@@ -162,7 +162,7 @@ const createMockSupabaseClient = () => {
               console.error('Error in auth listener:', e)
             }
           })
-        }, 100)
+        }, 50)
         
         return { error: null }
       },
