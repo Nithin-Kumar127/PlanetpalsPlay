@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Header } from "@/components/layout/Header";
 import { ChatBot } from "@/components/chatbot/ChatBot";
+import { CustomCursor } from "@/components/CustomCursor";
 import { useState } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -31,6 +32,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TooltipProvider>
+          <CustomCursor />
           <Toaster />
           <Sonner />
           <BrowserRouter>

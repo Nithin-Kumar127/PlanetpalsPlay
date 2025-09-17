@@ -14,7 +14,6 @@ import { StreakCounter } from "@/components/StreakCounter";
 import { LearningPathway } from "@/components/LearningPathway";
 import { WeatherWidget } from "@/components/WeatherWidget";
 import { ParallaxBackground } from "@/components/ParallaxBackground";
-import { CustomCursor } from "@/components/CustomCursor";
 
 const achievements = [
   { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
@@ -126,7 +125,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <ParallaxBackground />
-      <CustomCursor />
       
       {/* Hero Section */}
       <section className="relative overflow-hidden">
