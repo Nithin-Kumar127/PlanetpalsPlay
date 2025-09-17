@@ -94,10 +94,6 @@ export const Header = () => {
                     <Gamepad2 className="mr-2 h-4 w-4" />
                     Games
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/climate-simulator')}>
-                    <Globe className="mr-2 h-4 w-4" />
-                    Climate Simulator
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/achievements')}>
                     <Award className="mr-2 h-4 w-4" />
                     Achievements

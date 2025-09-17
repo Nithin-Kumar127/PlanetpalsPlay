@@ -31,6 +31,17 @@ const Games = () => {
       path: '/climate-simulator'
     },
     {
+      id: 'simulator',
+      title: 'Climate Action Simulator',
+      description: 'Lead the world as a climate policy maker and save the planet!',
+      icon: Globe,
+      difficulty: 'Medium',
+      duration: '15-30 min',
+      color: 'from-blue-500 to-green-500',
+      features: ['Strategic decision making', 'Real-time consequences', 'Budget management', 'Multiple scenarios'],
+      path: '/climate-simulator'
+    },
+    {
       id: 'calculator',
       title: 'Carbon Footprint Calculator',
       description: 'Calculate your personal carbon footprint and get personalized tips!',
@@ -152,7 +163,7 @@ const Games = () => {
         {/* Coming Soon Section */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold text-center mb-8">Coming Soon</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="opacity-60">
               <CardContent className="p-6 text-center">
                 <div className="w-16 h-16 bg-muted rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -174,6 +185,17 @@ const Games = () => {
                 <Badge variant="outline" className="mt-3">Coming Soon</Badge>
               </CardContent>
             </Card>
+            
+            <Card className="opacity-60">
+              <CardContent className="p-6 text-center">
+                <div className="w-16 h-16 bg-muted rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="font-semibold mb-2">Energy Challenge</h3>
+                <p className="text-sm text-muted-foreground">Manage renewable energy grids and optimize efficiency</p>
+                <Badge variant="outline" className="mt-3">Coming Soon</Badge>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -191,13 +213,17 @@ const Games = () => {
                   <Brain className="mr-2 h-5 w-5" />
                   Quick Quiz
                 </Button>
-                <Button onClick={() => navigate('/climate-simulator')} variant="outline" size="lg">
+                <Button onClick={() => navigate('/climate-simulator')} size="lg">
                   <Globe className="mr-2 h-5 w-5" />
                   Climate Simulator
                 </Button>
-                <Button onClick={() => navigate('/carbon-calculator')} variant="outline" size="lg">
+                <Button onClick={() => navigate('/carbon-calculator')} size="lg">
                   <Calculator className="mr-2 h-5 w-5" />
                   Carbon Calculator
+                </Button>
+                <Button onClick={() => navigate('/eco-match')} size="lg">
+                  <Target className="mr-2 h-5 w-5" />
+                  Eco Match
                 </Button>
               </div>
             </CardContent>
