@@ -1,195 +1,102 @@
 import { createClient } from '@supabase/supabase-js'
 
-// For demo purposes, we'll use a mock setup since Supabase isn't configured
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co'
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key'
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-// Create a mock client for demo purposes
-const createMockSupabaseClient = () => {
-  // Load existing users from localStorage
-  const loadUsers = () => {
-    try {
-      const stored = localStorage.getItem('mockUsers')
-      return stored ? new Map(JSON.parse(stored)) : new Map()
-    } catch {
-      return new Map()
-    }
-  }
-  
-  // Save users to localStorage
-  const saveUsers = (users) => {
-    try {
-      localStorage.setItem('mockUsers', JSON.stringify([...users]))
-    } catch (e) {
-      console.error('Failed to save users to localStorage:', e)
-    }
-  }
-  
-  const mockUsers = loadUsers()
-  let currentUser = null
-  const listeners = new Set()
-
-  return {
-    auth: {
-      getSession: async () => {
-        console.log('Getting session, current user:', currentUser)
-        return { 
-          data: { 
-            session: currentUser ? { 
-              user: currentUser,
-              access_token: 'mock-token',
-              refresh_token: 'mock-refresh'
-            } : null 
-          },
-          error: null
-        }
-      },
-      
-      signUp: async ({ email, password, options }) => {
-        console.log('Attempting signup for:', email)
-        
-        if (mockUsers.has(email)) {
-          console.log('User already exists')
-          return { 
-            data: { user: null, session: null },
-            error: { message: 'User already registered' } 
-          }
-        }
-        
-        const user = {
-          id: Math.random().toString(36).substr(2, 9),
-          email,
-          user_metadata: options?.data || {},
-          created_at: new Date().toISOString(),
-          email_confirmed_at: new Date().toISOString()
-        }
-        
-        mockUsers.set(email, { ...user, password })
-        saveUsers(mockUsers)
-        currentUser = user
-        
-        console.log('Signup successful for:', email)
-        
-        // Notify listeners after a short delay
-        setTimeout(() => {
-          listeners.forEach(callback => {
-            try {
-              callback('SIGNED_IN', { 
-                user,
-                session: {
-                  user,
-                  access_token: 'mock-token',
-                  refresh_token: 'mock-refresh'
-                }
-              })
-            } catch (e) {
-              console.error('Error in auth listener:', e)
-            }
-          })
-        }, 50)
-        
-        return { 
-          data: { 
-            user,
-            session: {
-              user,
-              access_token: 'mock-token',
-              refresh_token: 'mock-refresh'
-            }
-          }, 
-          error: null 
-        }
-      },
-      
-      signInWithPassword: async ({ email, password }) => {
-        console.log('Attempting signin for:', email)
-        
-        const userData = mockUsers.get(email)
-        if (!userData || userData.password !== password) {
-          console.log('Invalid credentials for:', email)
-          return { 
-            data: { user: null, session: null },
-            error: { message: 'Invalid login credentials' } 
-          }
-        }
-        
-        const { password: _, ...user } = userData
-        currentUser = user
-        
-        console.log('Signin successful for:', email)
-        
-        // Notify listeners after a short delay
-        setTimeout(() => {
-          listeners.forEach(callback => {
-            try {
-              callback('SIGNED_IN', { 
-                user,
-                session: {
-                  user,
-                  access_token: 'mock-token',
-                  refresh_token: 'mock-refresh'
-                }
-              })
-            } catch (e) {
-              console.error('Error in auth listener:', e)
-            }
-          })
-        }, 50)
-        
-        return { 
-          data: { 
-            user,
-            session: {
-              user,
-              access_token: 'mock-token',
-              refresh_token: 'mock-refresh'
-            }
-          }, 
-          error: null 
-        }
-      },
-      
-      signOut: async () => {
-        console.log('Signing out user:', currentUser?.email)
-        currentUser = null
-        
-        // Notify listeners after a short delay
-        setTimeout(() => {
-          listeners.forEach(callback => {
-            try {
-              callback('SIGNED_OUT', { user: null, session: null })
-            } catch (e) {
-              console.error('Error in auth listener:', e)
-            }
-          })
-        }, 50)
-        
-        return { error: null }
-      },
-      
-      onAuthStateChange: (callback) => {
-        console.log('Adding auth state change listener')
-        listeners.add(callback)
-        return {
-          data: {
-            subscription: {
-              unsubscribe: () => {
-                console.log('Removing auth state change listener')
-                listeners.delete(callback)
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-export const supabase = createMockSupabaseClient()
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export type User = {
   id: string
   email: string
   name?: string
   created_at: string
+}
+
+export type UserProfile = {
+  id: string
+  email: string
+  name: string | null
+  total_xp: number
+  current_level: number
+  current_streak: number
+  best_streak: number
+  last_activity_date: string
+  lessons_completed: number
+  achievements_earned: number
+  created_at: string
+  updated_at: string
+}
+
+export type LessonCategory = {
+  id: number
+  title: string
+  description: string
+  icon: string
+  difficulty: string
+  color_class: string
+  order_index: number
+  created_at: string
+}
+
+export type Lesson = {
+  id: number
+  category_id: number
+  title: string
+  description: string | null
+  content: any
+  xp_reward: number
+  difficulty: string
+  order_index: number
+  created_at: string
+}
+
+export type UserLessonProgress = {
+  id: string
+  user_id: string
+  lesson_id: number
+  completed: boolean
+  score: number | null
+  time_spent: number
+  completed_at: string | null
+  created_at: string
+}
+
+export type Achievement = {
+  id: number
+  name: string
+  description: string
+  icon: string
+  xp_reward: number
+  criteria: any
+  category: string
+  created_at: string
+}
+
+export type UserAchievement = {
+  id: string
+  user_id: string
+  achievement_id: number
+  earned_at: string
+  achievement?: Achievement
+}
+
+export type DailyActivity = {
+  id: string
+  user_id: string
+  activity_date: string
+  lessons_completed: number
+  xp_earned: number
+  time_spent: number
+  created_at: string
+}
+
+export type QuizAttempt = {
+  id: string
+  user_id: string
+  quiz_type: string
+  score: number
+  total_questions: number
+  correct_answers: number
+  time_taken: number | null
+  completed_at: string
 }

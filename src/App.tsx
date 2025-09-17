@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LearningProvider } from "@/contexts/LearningContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Header } from "@/components/layout/Header";
 import { ChatBot } from "@/components/chatbot/ChatBot";
@@ -31,121 +32,123 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <CustomCursor />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <Header />
-                  <Index />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/lessons/:categoryId" element={
-                <ProtectedRoute>
-                  <LessonPath />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/lesson/:lessonId" element={
-                <ProtectedRoute>
-                  <LessonDetail />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/achievements" element={
-                <ProtectedRoute>
-                  <Header />
-                  <Achievements />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Header />
-                  <Profile />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/game" element={
-                <ProtectedRoute>
-                  <Game />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/leaderboard" element={
-                <ProtectedRoute>
-                  <Header />
-                  <Leaderboard />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/climate-simulator" element={
-                <ProtectedRoute>
-                  <ClimateSimulator />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/games" element={
-                <ProtectedRoute>
-                  <Header />
-                  <Games />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/carbon-calculator" element={
-                <ProtectedRoute>
-                  <CarbonCalculator />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="/eco-match" element={
-                <ProtectedRoute>
-                  <EcoMatchGame />
-                  <ChatBot 
-                    isOpen={isChatBotOpen} 
-                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
-                  />
-                </ProtectedRoute>
-              } />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <LearningProvider>
+          <TooltipProvider>
+            <CustomCursor />
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Header />
+                    <Index />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/lessons/:categoryId" element={
+                  <ProtectedRoute>
+                    <LessonPath />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/lesson/:lessonId" element={
+                  <ProtectedRoute>
+                    <LessonDetail />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/achievements" element={
+                  <ProtectedRoute>
+                    <Header />
+                    <Achievements />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Header />
+                    <Profile />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/game" element={
+                  <ProtectedRoute>
+                    <Game />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/leaderboard" element={
+                  <ProtectedRoute>
+                    <Header />
+                    <Leaderboard />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/climate-simulator" element={
+                  <ProtectedRoute>
+                    <ClimateSimulator />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/games" element={
+                  <ProtectedRoute>
+                    <Header />
+                    <Games />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/carbon-calculator" element={
+                  <ProtectedRoute>
+                    <CarbonCalculator />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/eco-match" element={
+                  <ProtectedRoute>
+                    <EcoMatchGame />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </LearningProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

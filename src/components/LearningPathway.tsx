@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Lock, Play, Globe, Zap, Target, Leaf } from "lucide-react";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface PathwayProps {
   completedLessons: number[];
@@ -11,54 +12,38 @@ interface PathwayProps {
 
 export const LearningPathway = ({ completedLessons }: PathwayProps) => {
   const navigate = useNavigate();
+  const { lessonCategories, lessons } = useLearning();
 
-  const pathwaySteps = [
-    {
-      id: 1,
-      title: "Climate Basics",
-      description: "Foundation of climate science",
-      icon: Globe,
-      color: "from-blue-500 to-cyan-400",
-      lessons: [1, 2, 3, 4, 5],
-      unlocked: true,
-    },
-    {
-      id: 2,
-      title: "Renewable Energy",
-      description: "Clean energy solutions",
-      icon: Zap,
-      color: "from-yellow-500 to-orange-400",
-      lessons: [6, 7, 8, 9, 10],
-      unlocked: false,
-    },
-    {
-      id: 3,
-      title: "Waste Management",
-      description: "Sustainable waste practices",
-      icon: Target,
-      color: "from-green-500 to-emerald-400",
-      lessons: [11, 12, 13, 14, 15],
-      unlocked: false,
-    },
-    {
-      id: 4,
-      title: "Ecosystem Protection",
-      description: "Biodiversity conservation",
-      icon: Leaf,
-      color: "from-emerald-600 to-green-500",
-      lessons: [16, 17, 18, 19, 20],
-      unlocked: false,
-    },
-  ];
+  const iconMap: { [key: string]: any } = {
+    Globe,
+    Zap,
+    Target,
+    Leaf
+  };
 
   const isStepUnlocked = (stepId: number) => {
     if (stepId === 1) return true;
     
-    const previousStep = pathwaySteps[stepId - 2];
+    const previousStep = pathwaySteps.find(s => s.id === stepId - 1);
     if (!previousStep) return false;
     
     return previousStep.lessons.every(lessonId => completedLessons.includes(lessonId));
   };
+
+  const pathwaySteps = lessonCategories.map(category => {
+    const categoryLessons = lessons.filter(l => l.category_id === category.id);
+    const Icon = iconMap[category.icon] || Globe;
+    
+    return {
+      id: category.id,
+      title: category.title,
+      description: category.description,
+      icon: Icon,
+      color: category.color_class,
+      lessons: categoryLessons.map(l => l.id),
+      unlocked: category.id === 1 ? true : isStepUnlocked(category.id),
+    };
+  });
 
   const getStepProgress = (lessons: number[]) => {
     const completed = lessons.filter(id => completedLessons.includes(id)).length;
@@ -252,7 +237,7 @@ export const LearningPathway = ({ completedLessons }: PathwayProps) => {
               </div>
               <div>
                 <div className="text-2xl font-bold text-warning">
-                  {Math.round((completedLessons.length / 20) * 100)}%
+                  {Math.round((completedLessons.length / lessons.length) * 100)}%
                 </div>
                 <div className="text-sm text-muted-foreground">Overall Progress</div>
               </div>
