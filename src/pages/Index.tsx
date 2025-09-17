@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Leaf, Award, Zap, Globe, Target, BookOpen, TrendingUp, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,18 +15,33 @@ const Index = () => {
   const navigate = useNavigate();
   const [currentStreak, setCurrentStreak] = useState(7);
   const [totalXP, setTotalXP] = useState(1250);
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+
+  useEffect(() => {
+    // Load completed lessons from localStorage
+    const saved = localStorage.getItem('completedLessons');
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
 
   // Use a placeholder image from Pexels instead of local import
   const heroImage = "https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+  
+  const calculateProgress = (categoryLessons: number[]) => {
+    const completed = categoryLessons.filter(id => completedLessons.includes(id)).length;
+    return Math.round((completed / categoryLessons.length) * 100);
+  };
+
   const lessonCategories = [
     {
       id: 1,
       title: "Climate Basics",
       description: "Understanding greenhouse gases and global warming",
       icon: Globe,
-      progress: 85,
-      lessonsCompleted: 8,
-      totalLessons: 10,
+      progress: calculateProgress([1, 2, 3, 4, 5]),
+      lessonsCompleted: [1, 2, 3, 4, 5].filter(id => completedLessons.includes(id)).length,
+      totalLessons: 5,
       difficulty: "Beginner",
       color: "bg-gradient-to-br from-blue-500 to-cyan-400",
     },
@@ -34,8 +50,8 @@ const Index = () => {
       title: "Renewable Energy",
       description: "Solar, wind, and sustainable power sources",
       icon: Zap,
-      progress: 60,
-      lessonsCompleted: 6,
+      progress: 0,
+      lessonsCompleted: 0,
       totalLessons: 10,
       difficulty: "Intermediate", 
       color: "bg-gradient-to-br from-yellow-500 to-orange-400",
@@ -45,8 +61,8 @@ const Index = () => {
       title: "Waste Management",
       description: "Recycling, composting, and reducing waste",
       icon: Target,
-      progress: 30,
-      lessonsCompleted: 3,
+      progress: 0,
+      lessonsCompleted: 0,
       totalLessons: 10,
       difficulty: "Beginner",
       color: "bg-gradient-to-br from-green-500 to-emerald-400",
@@ -113,7 +129,7 @@ const Index = () => {
             />
             <ProgressStats 
               title="Lessons Completed" 
-              value="17" 
+              value={completedLessons.length.toString()}
               icon={BookOpen}
               color="text-accent"
             />

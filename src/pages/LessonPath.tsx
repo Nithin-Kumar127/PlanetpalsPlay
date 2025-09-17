@@ -6,12 +6,21 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const LessonPath = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [completedLessons, setCompletedLessons] = useState<number[]>([1, 2, 3]);
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+
+  useEffect(() => {
+    // Load completed lessons from localStorage
+    const saved = localStorage.getItem('completedLessons');
+    if (saved) {
+      setCompletedLessons(JSON.parse(saved));
+    }
+  }, []);
 
   const categories = {
     "1": {
@@ -78,8 +87,10 @@ const LessonPath = () => {
   }
 
   const isLessonUnlocked = (lessonId: number, index: number) => {
-    if (index === 0) return true;
-    return completedLessons.includes(lessonId - 1);
+    if (index === 0) return true; // First lesson is always unlocked
+    // Check if previous lesson is completed
+    const previousLessonId = category.lessons[index - 1].id;
+    return completedLessons.includes(previousLessonId);
   };
 
   const isLessonCompleted = (lessonId: number) => {
@@ -96,32 +107,17 @@ const LessonPath = () => {
   };
 
   const startLesson = (lessonId: number) => {
-    // Map lesson IDs to the actual lesson content
-    const lessonMap: Record<number, string> = {
-      1: "1", // What is Climate Change?
-      2: "2", // The Greenhouse Effect  
-      3: "3", // Carbon Footprint Basics
-      4: "4", // Global Temperature Trends
-      5: "5", // Ice Caps and Sea Levels
-      6: "1", // Map other lessons to available content for now
-      7: "2",
-      8: "3",
-      9: "1",
-      10: "2",
-      11: "3",
-      12: "1",
-      13: "2",
-      14: "3",
-      15: "1",
-      16: "2",
-      17: "3",
-      18: "1",
-      19: "2",
-      20: "3"
-    };
-    
-    const mappedLessonId = lessonMap[lessonId] || "1";
-    navigate(`/lesson/${mappedLessonId}`);
+    // For Climate Basics category, use direct mapping
+    if (categoryId === "1") {
+      navigate(`/lesson/${lessonId}`);
+    } else {
+      // For other categories, show coming soon message
+      toast({
+        title: "Coming Soon! 🚧",
+        description: "This lesson is under development. Try the Climate Basics lessons first!",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

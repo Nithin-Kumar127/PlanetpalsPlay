@@ -305,14 +305,26 @@ const LessonDetail = () => {
       setSelectedAnswer(null);
       setShowResult(false);
     } else {
-      setLessonCompleted(true);
-      const finalScore = Math.round((correctAnswers / lesson.cards.filter(c => c.type === 'quiz').length) * 100);
-      
-      toast({
-        title: "Lesson Complete! 🌱",
-        description: `You earned ${lesson.xp} XP! Keep up the great work!`,
-      });
+      completeLessonAndUnlockNext();
     }
+  };
+
+  const completeLessonAndUnlockNext = () => {
+    // Mark current lesson as completed
+    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
+    const lessonIdNum = parseInt(lessonId as string);
+    
+    if (!completedLessons.includes(lessonIdNum)) {
+      completedLessons.push(lessonIdNum);
+      localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+    }
+    
+    setLessonCompleted(true);
+    
+    toast({
+      title: "Lesson Complete! 🌱",
+      description: `You earned ${lesson.xp} XP! ${lessonIdNum < 5 ? 'Next lesson unlocked!' : 'All lessons completed!'}`,
+    });
   };
 
   const handlePrevCard = () => {
@@ -575,6 +587,164 @@ const LessonDetail = () => {
       </div>
     </div>
   );
+  "4": {
+    id: "4",
+    title: "Global Temperature Trends",
+    difficulty: "Medium",
+    xp: 125,
+    description: "Understanding how scientists measure and track global temperature changes",
+    cards: [
+      {
+        id: 1,
+        type: 'concept',
+        title: 'How We Measure Global Temperature',
+        content: 'Scientists use a global network of instruments to track Earth\'s temperature with remarkable precision.',
+        points: [
+          'Weather stations on land measure air temperature daily',
+          'Ocean buoys and ships measure sea surface temperatures',
+          'Satellites provide global coverage from space',
+          'Data is combined to calculate global average temperature'
+        ],
+        icon: BookOpen
+      },
+      {
+        id: 2,
+        type: 'concept',
+        title: 'Understanding Proxy Data',
+        content: 'To understand past climates, scientists use indirect evidence called proxy data.',
+        points: [
+          'Ice cores from glaciers contain ancient atmospheric gases',
+          'Tree rings show growth patterns affected by temperature',
+          'Coral reefs record ocean temperature in their structure',
+          'Sediment layers preserve climate information over millennia'
+        ],
+        icon: Target
+      },
+      {
+        id: 3,
+        type: 'example',
+        title: 'The Temperature Record',
+        content: 'The data shows clear evidence of unprecedented warming in recent decades.',
+        points: [
+          'Global average temperature has risen 1.1°C since late 1800s',
+          'The last decade was the warmest on record',
+          '19 of the 20 warmest years have occurred since 2000',
+          'Warming rate has accelerated: 0.18°C per decade since 1981'
+        ],
+        icon: Lightbulb
+      },
+      {
+        id: 4,
+        type: 'concept',
+        title: 'The Keeling Curve',
+        content: 'This famous graph tracks atmospheric CO₂ levels since 1958, showing the direct link to temperature.',
+        points: [
+          'Shows steady increase in atmospheric CO₂ concentration',
+          'Seasonal "sawtooth" pattern from plant growth cycles',
+          'CO₂ levels have risen from 315 ppm to over 420 ppm',
+          'Directly correlates with global temperature increases'
+        ],
+        icon: Target
+      },
+      {
+        id: 5,
+        type: 'quiz',
+        title: 'Temperature Trends Quiz',
+        content: 'Test your understanding of global temperature measurement and trends.',
+        quiz: {
+          question: 'What does "proxy data" like ice cores help scientists understand?',
+          options: [
+            'Predict next week\'s weather forecast',
+            'Understand what climate was like thousands of years ago',
+            'Measure today\'s exact ocean temperature',
+            'Control current atmospheric conditions'
+          ],
+          correct: 1,
+          explanation: 'Proxy data like ice cores, tree rings, and coral reefs help scientists reconstruct past climates, giving us a long-term perspective on current climate change that extends far beyond our modern instrument records.'
+        },
+        icon: Brain
+      }
+    ]
+  },
+  "5": {
+    id: "5",
+    title: "Ice Caps and Sea Levels",
+    difficulty: "Hard",
+    xp: 150,
+    description: "Learn how melting ice and thermal expansion cause sea level rise",
+    cards: [
+      {
+        id: 1,
+        type: 'concept',
+        title: 'Two Main Causes of Sea Level Rise',
+        content: 'Rising sea levels result from two primary physical processes caused by global warming.',
+        points: [
+          'Thermal expansion: Warmer water takes up more space',
+          'Melting land ice: Glaciers and ice sheets add water to oceans',
+          'Thermal expansion accounts for about 50% of current rise',
+          'Ice melt contribution is accelerating as warming continues'
+        ],
+        icon: BookOpen
+      },
+      {
+        id: 2,
+        type: 'analogy',
+        title: 'Land Ice vs Sea Ice',
+        content: 'Understanding the difference between land ice and sea ice is crucial for sea level impacts.',
+        points: [
+          'Land ice = Ice cubes on a table that fall into your glass',
+          'Sea ice = Ice cubes already floating in your glass',
+          'When land ice melts, it adds new water (raises sea level)',
+          'When sea ice melts, water level stays the same (Archimedes\' Principle)'
+        ],
+        icon: Lightbulb
+      },
+      {
+        id: 3,
+        type: 'concept',
+        title: 'The Albedo Effect Feedback Loop',
+        content: 'Ice loss creates a dangerous positive feedback loop that accelerates warming.',
+        points: [
+          'Ice is white and reflects sunlight back to space (high albedo)',
+          'Dark ocean/land absorbs more heat (low albedo)',
+          'Less ice → more absorption → more warming → less ice',
+          'This feedback loop accelerates both warming and ice loss'
+        ],
+        icon: Target
+      },
+      {
+        id: 4,
+        type: 'example',
+        title: 'Real-World Impacts',
+        content: 'Sea level rise is already affecting communities and ecosystems worldwide.',
+        points: [
+          'Global sea level has risen 21-24 cm since 1880',
+          'Current rate: 3.3 mm per year and accelerating',
+          'Coastal flooding during high tides and storms increases',
+          'Small island nations face existential threats'
+        ],
+        icon: Lightbulb
+      },
+      {
+        id: 5,
+        type: 'quiz',
+        title: 'Sea Level Rise Quiz',
+        content: 'Test your knowledge about ice caps and sea level rise.',
+        quiz: {
+          question: 'Which contributes MORE to current sea level rise?',
+          options: [
+            'Melting Arctic sea ice floating in the ocean',
+            'Thermal expansion of warming ocean water',
+            'Increased rainfall over the oceans',
+            'Underwater volcanic activity'
+          ],
+          correct: 1,
+          explanation: 'Thermal expansion of warming ocean water is currently the largest single contributor to sea level rise, accounting for about 50% of the total rise. As water warms, it expands and takes up more space.'
+        },
+        icon: Brain
+      }
+    ]
+  }
 };
 
 export default LessonDetail;
