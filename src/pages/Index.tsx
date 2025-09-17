@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import heroImage from "@/assets/hero-climate-learning.jpg";
 import { LessonCard } from "@/components/LessonCard";
 import { ProgressStats } from "@/components/ProgressStats";
 import { AchievementBadge } from "@/components/AchievementBadge";
@@ -16,6 +15,8 @@ const Index = () => {
   const [currentStreak, setCurrentStreak] = useState(7);
   const [totalXP, setTotalXP] = useState(1250);
 
+  // Use a placeholder image from Pexels instead of local import
+  const heroImage = "https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
   const lessonCategories = [
     {
       id: 1,

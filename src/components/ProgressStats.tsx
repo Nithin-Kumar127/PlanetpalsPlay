@@ -21,7 +21,7 @@ export const ProgressStats = ({ title, value, icon: Icon, color, onClick }: Prog
             <p className="text-sm text-muted-foreground">{title}</p>
             <p className="text-2xl font-bold text-card-foreground">{value}</p>
           </div>
-          <div className={`p-2 rounded-lg bg-muted ${color}`}>
+          <div className={`p-2 rounded-lg ${color}`}>
             <Icon className="h-5 w-5" />
           </div>
         </div>
