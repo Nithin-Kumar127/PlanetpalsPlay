@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useGameSound } from "@/hooks/useGameSound";
+import { SoundControls } from "@/components/ui/sound-controls";
 
 interface Question {
   id: number;
@@ -129,6 +131,7 @@ const Game = () => {
     setTimeLeft(mode === 'quick' ? 20 : 30);
     setSelectedAnswer(null);
     setShowResult(false);
+    gameSound.playSound();
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
