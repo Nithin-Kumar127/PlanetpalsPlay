@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Leaf, Award, Zap, Globe, Target, BookOpen, TrendingUp, Gamepad2 } from "lucide-react";
+import { Leaf, Award, Zap, Globe, Target, BookOpen, TrendingUp, Gamepad2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -140,6 +140,13 @@ const Index = () => {
               icon={Award}
               color="text-warning"
               onClick={() => navigate("/achievements")}
+            />
+            <ProgressStats 
+              title="Leaderboard" 
+              value="Rank"
+              icon={Trophy}
+              color="text-purple-500"
+              onClick={() => navigate("/leaderboard")}
             />
             <Card 
               className="hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200"

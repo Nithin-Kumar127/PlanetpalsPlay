@@ -16,6 +16,7 @@ import LessonDetail from "./pages/LessonDetail";
 import Achievements from "./pages/Achievements";
 import Profile from "./pages/Profile";
 import Game from "./pages/Game";
+import Leaderboard from "./pages/Leaderboard";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +83,16 @@ const App = () => {
               <Route path="/game" element={
                 <ProtectedRoute>
                   <Game />
+                  <ChatBot 
+                    isOpen={isChatBotOpen} 
+                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="/leaderboard" element={
+                <ProtectedRoute>
+                  <Header />
+                  <Leaderboard />
                   <ChatBot 
                     isOpen={isChatBotOpen} 
                     onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useNavigate } from 'react-router-dom'
-import { User, LogOut, Award, Leaf, Gamepad2 } from 'lucide-react'
+import { User, LogOut, Award, Leaf, Gamepad2, Trophy } from 'lucide-react'
 
 export const Header = () => {
   const { user, signOut } = useAuth()
@@ -49,6 +49,15 @@ export const Header = () => {
                 Achievements
               </Button>
 
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/leaderboard')}
+                className="hidden sm:flex"
+              >
+                <Trophy className="h-4 w-4 mr-2" />
+                Leaderboard
+              </Button>
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -79,6 +88,10 @@ export const Header = () => {
                   <DropdownMenuItem onClick={() => navigate('/achievements')}>
                     <Award className="mr-2 h-4 w-4" />
                     Achievements
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/leaderboard')}>
+                    <Trophy className="mr-2 h-4 w-4" />
+                    Leaderboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
