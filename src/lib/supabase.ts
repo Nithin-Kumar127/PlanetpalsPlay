@@ -6,7 +6,26 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key'
 
 // Create a mock client for demo purposes
 const createMockSupabaseClient = () => {
-  const mockUsers = new Map()
+  // Load existing users from localStorage
+  const loadUsers = () => {
+    try {
+      const stored = localStorage.getItem('mockUsers')
+      return stored ? new Map(JSON.parse(stored)) : new Map()
+    } catch {
+      return new Map()
+    }
+  }
+  
+  // Save users to localStorage
+  const saveUsers = (users) => {
+    try {
+      localStorage.setItem('mockUsers', JSON.stringify([...users]))
+    } catch (e) {
+      console.error('Failed to save users to localStorage:', e)
+    }
+  }
+  
+  const mockUsers = loadUsers()
   let currentUser = null
   const listeners = new Set()
 
@@ -46,6 +65,7 @@ const createMockSupabaseClient = () => {
         }
         
         mockUsers.set(email, { ...user, password })
+        saveUsers(mockUsers)
         currentUser = user
         
         console.log('Signup successful for:', email)
