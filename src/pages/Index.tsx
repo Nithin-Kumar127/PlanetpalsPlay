@@ -11,6 +11,56 @@ import { ProgressStats } from "@/components/ProgressStats";
 import { AchievementBadge } from "@/components/AchievementBadge";
 import { StreakCounter } from "@/components/StreakCounter";
 
+const achievements = [
+  { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
+  { id: 2, name: "Week Warrior", description: "7-day learning streak", icon: Award, earned: true },
+  { id: 3, name: "Climate Champion", description: "Complete 50 lessons", icon: Globe, earned: false },
+  { id: 4, name: "Energy Expert", description: "Master renewable energy", icon: Zap, earned: false },
+];
+
+const baseLessonCategories = [
+  {
+    id: 1,
+    title: "Climate Basics",
+    description: "Understanding greenhouse gases and global warming",
+    icon: Globe,
+    totalLessons: 5,
+    difficulty: "Beginner",
+    color: "bg-gradient-to-br from-blue-500 to-cyan-400",
+    unlocked: true,
+  },
+  {
+    id: 2,
+    title: "Renewable Energy",
+    description: "Solar, wind, and sustainable power sources",
+    icon: Zap,
+    totalLessons: 5,
+    difficulty: "Intermediate", 
+    color: "bg-gradient-to-br from-yellow-500 to-orange-400",
+    unlocked: false,
+  },
+  {
+    id: 3,
+    title: "Waste Management",
+    description: "Recycling, composting, and reducing waste",
+    icon: Target,
+    totalLessons: 5,
+    difficulty: "Beginner",
+    color: "bg-gradient-to-br from-green-500 to-emerald-400",
+    unlocked: false,
+  },
+  {
+    id: 4,
+    title: "Ecosystem Protection",
+    description: "Biodiversity, conservation, and habitat preservation",
+    icon: Leaf,
+    totalLessons: 5,
+    difficulty: "Advanced",
+    color: "bg-gradient-to-br from-emerald-600 to-green-500",
+    unlocked: false,
+  },
+];
+
 const Index = () => {
   const navigate = useNavigate();
   const [currentStreak, setCurrentStreak] = useState(7);
@@ -33,87 +83,40 @@ const Index = () => {
     return Math.round((completed / categoryLessons.length) * 100);
   };
 
-  const isCategoryUnlocked = (categoryId: number) => {
+  const isCategoryUnlocked = (categoryId: number): boolean => {
     if (categoryId === 1) return true; // Climate Basics always unlocked
     
-    // Check if previous category is completed
-    const previousCategoryLessons = lessonCategories[categoryId - 2].totalLessons;
-    const previousCategoryIds = [];
+    // Check if all lessons from previous category are completed
+    const previousCategoryIndex = categoryId - 2;
+    if (previousCategoryIndex < 0 || previousCategoryIndex >= baseLessonCategories.length) return false;
     
-    // Get lesson IDs for previous category
-    for (let i = 0; i < categoryId - 1; i++) {
-      const startId = i * 5 + 1; // Each category has 5 lessons starting from 1, 6, 11, 16
-      for (let j = 0; j < lessonCategories[i].totalLessons; j++) {
-        previousCategoryIds.push(startId + j);
-      }
+    const previousCategory = baseLessonCategories[previousCategoryIndex];
+    const previousCategoryStart = (categoryId - 2) * 5 + 1;
+    const previousCategoryLessonIds = [];
+    
+    for (let i = 0; i < previousCategory.totalLessons; i++) {
+      previousCategoryLessonIds.push(previousCategoryStart + i);
     }
     
-    const lastCategoryStart = (categoryId - 2) * 5 + 1;
-    const lastCategoryIds = [];
-    for (let i = 0; i < lessonCategories[categoryId - 2].totalLessons; i++) {
-      lastCategoryIds.push(lastCategoryStart + i);
-    }
-    
-    return lastCategoryIds.every(id => completedLessons.includes(id));
+    return previousCategoryLessonIds.every(id => completedLessons.includes(id));
   };
 
-  const lessonCategories = [
-    {
-      id: 1,
-      title: "Climate Basics",
-      description: "Understanding greenhouse gases and global warming",
-      icon: Globe,
-      progress: calculateProgress([1, 2, 3, 4, 5]),
-      lessonsCompleted: [1, 2, 3, 4, 5].filter(id => completedLessons.includes(id)).length,
-      totalLessons: 5,
-      difficulty: "Beginner",
-      color: "bg-gradient-to-br from-blue-500 to-cyan-400",
-      unlocked: true,
-    },
-    {
-      id: 2,
-      title: "Renewable Energy",
-      description: "Solar, wind, and sustainable power sources",
-      icon: Zap,
-      progress: calculateProgress([6, 7, 8, 9, 10]),
-      lessonsCompleted: [6, 7, 8, 9, 10].filter(id => completedLessons.includes(id)).length,
-      totalLessons: 10,
-      difficulty: "Intermediate", 
-      color: "bg-gradient-to-br from-yellow-500 to-orange-400",
-      unlocked: isCategoryUnlocked(2),
-    },
-    {
-      id: 3,
-      title: "Waste Management",
-      description: "Recycling, composting, and reducing waste",
-      icon: Target,
-      progress: calculateProgress([11, 12, 13, 14, 15]),
-      lessonsCompleted: [11, 12, 13, 14, 15].filter(id => completedLessons.includes(id)).length,
-      totalLessons: 10,
-      difficulty: "Beginner",
-      color: "bg-gradient-to-br from-green-500 to-emerald-400",
-      unlocked: isCategoryUnlocked(3),
-    },
-    {
-      id: 4,
-      title: "Ecosystem Protection",
-      description: "Biodiversity, conservation, and habitat preservation",
-      icon: Leaf,
-      progress: calculateProgress([16, 17, 18, 19, 20]),
-      lessonsCompleted: [16, 17, 18, 19, 20].filter(id => completedLessons.includes(id)).length,
-      totalLessons: 12,
-      difficulty: "Advanced",
-      color: "bg-gradient-to-br from-emerald-600 to-green-500",
-      unlocked: isCategoryUnlocked(4),
-    },
-  ];
-
-  const achievements = [
-    { id: 1, name: "First Steps", description: "Complete your first lesson", icon: BookOpen, earned: true },
-    { id: 2, name: "Week Warrior", description: "7-day learning streak", icon: Award, earned: true },
-    { id: 3, name: "Climate Champion", description: "Complete 50 lessons", icon: Globe, earned: false },
-    { id: 4, name: "Energy Expert", description: "Master renewable energy", icon: Zap, earned: false },
-  ];
+  const lessonCategories = React.useMemo(() => {
+    return baseLessonCategories.map((category) => {
+      const startLessonId = (category.id - 1) * 5 + 1;
+      const categoryLessonIds = [];
+      for (let i = 0; i < category.totalLessons; i++) {
+        categoryLessonIds.push(startLessonId + i);
+      }
+      
+      return {
+        ...category,
+        progress: calculateProgress(categoryLessonIds),
+        lessonsCompleted: categoryLessonIds.filter(id => completedLessons.includes(id)).length,
+        unlocked: category.id === 1 ? true : isCategoryUnlocked(category.id),
+      };
+    });
+  }, [completedLessons]);
 
   return (
     <div className="min-h-screen bg-background">
