@@ -184,13 +184,13 @@ const Index = () => {
             />
             <Card 
               className="hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200"
-              onClick={() => navigate("/game")}
+              onClick={() => navigate("/games")}
             >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Quiz Game</p>
-                    <p className="text-2xl font-bold text-card-foreground">Play Now</p>
+                    <p className="text-sm text-muted-foreground">Games Hub</p>
+                    <p className="text-2xl font-bold text-card-foreground">Play Games</p>
                   </div>
                   <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white animate-bounce-gentle">
                     <Gamepad2 className="h-5 w-5" />
@@ -242,9 +242,9 @@ const Index = () => {
           <Button 
             size="lg" 
             className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg"
-            onClick={() => navigate("/game")}
+            onClick={() => navigate("/games")}
           >
-            Play Quiz Game <Gamepad2 className="ml-2 h-5 w-5" />
+            Explore Games <Gamepad2 className="ml-2 h-5 w-5" />
           </Button>
         </div>
       </section>

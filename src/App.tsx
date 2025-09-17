@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import Game from "./pages/Game";
 import Leaderboard from "./pages/Leaderboard";
 import ClimateSimulator from "./pages/ClimateSimulator";
+import Games from "./pages/Games";
+import CarbonCalculator from "./pages/CarbonCalculator";
 
 const queryClient = new QueryClient();
 
@@ -103,6 +105,25 @@ const App = () => {
               <Route path="/climate-simulator" element={
                 <ProtectedRoute>
                   <ClimateSimulator />
+                  <ChatBot 
+                    isOpen={isChatBotOpen} 
+                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="/games" element={
+                <ProtectedRoute>
+                  <Header />
+                  <Games />
+                  <ChatBot 
+                    isOpen={isChatBotOpen} 
+                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                  />
+                </ProtectedRoute>
+              } />
+              <Route path="/carbon-calculator" element={
+                <ProtectedRoute>
+                  <CarbonCalculator />
                   <ChatBot 
                     isOpen={isChatBotOpen} 
                     onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 

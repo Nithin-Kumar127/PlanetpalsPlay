@@ -33,11 +33,11 @@ export const Header = () => {
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
-                onClick={() => navigate('/game')}
+                onClick={() => navigate('/games')}
                 className="hidden sm:flex"
               >
                 <Gamepad2 className="h-4 w-4 mr-2" />
-                Quiz Game
+                Games
               </Button>
 
               <Button
@@ -90,9 +90,9 @@ export const Header = () => {
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/game')}>
+                  <DropdownMenuItem onClick={() => navigate('/games')}>
                     <Gamepad2 className="mr-2 h-4 w-4" />
-                    Quiz Game
+                    Games
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/climate-simulator')}>
                     <Globe className="mr-2 h-4 w-4" />
