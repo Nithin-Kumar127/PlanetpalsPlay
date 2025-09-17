@@ -130,6 +130,15 @@ const App = () => {
                   />
                 </ProtectedRoute>
               } />
+              <Route path="/eco-match" element={
+                <ProtectedRoute>
+                  <EcoMatchGame />
+                  <ChatBot 
+                    isOpen={isChatBotOpen} 
+                    onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                  />
+                </ProtectedRoute>
+              } />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

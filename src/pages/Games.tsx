@@ -40,6 +40,17 @@ const Games = () => {
       color: 'from-green-500 to-emerald-400',
       features: ['Personal assessment', 'Lifestyle analysis', 'Custom recommendations', 'Impact comparison'],
       path: '/carbon-calculator'
+    },
+    {
+      id: 'eco-match',
+      title: 'Eco Match Challenge',
+      description: 'Drag and drop items into correct environmental categories!',
+      icon: Target,
+      difficulty: 'Medium',
+      duration: '5-15 min',
+      color: 'from-emerald-500 to-teal-400',
+      features: ['Drag & drop gameplay', 'Progressive levels', 'Visual learning', 'Streak bonuses'],
+      path: '/eco-match'
     }
   ];
 
