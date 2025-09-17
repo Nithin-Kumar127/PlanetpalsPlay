@@ -163,7 +163,7 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col p-0">
-        <ScrollArea className="flex-1 p-4">
+        <ScrollArea className="flex-1 p-4 max-h-[350px]">
           <div className="space-y-4">
             {messages.map((message) => (
               <div
@@ -211,9 +211,8 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
                 </div>
               </div>
             )}
-            
-            <div ref={messagesEndRef} />
           </div>
+          <div ref={messagesEndRef} />
         </ScrollArea>
 
         {/* Quick Suggestions */}
