@@ -20,6 +20,7 @@ import Leaderboard from "./pages/Leaderboard";
 import ClimateSimulator from "./pages/ClimateSimulator";
 import Games from "./pages/Games";
 import CarbonCalculator from "./pages/CarbonCalculator";
+import EcoMatchGame from "./pages/EcoMatchGame";
 
 const queryClient = new QueryClient();
 
