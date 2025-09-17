@@ -208,25 +208,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Achievements Section */}
-      <section className="py-16 px-4 bg-muted/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Your Achievements
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Unlock badges as you progress and become a climate champion!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {achievements.map((achievement, index) => (
-              <div key={achievement.id} className="animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
-                <AchievementBadge {...achievement} onClick={() => navigate("/achievements")} />
-              </div>
-            ))}
-          </div>
+          <LearningPathway completedLessons={completedLessons} />
         </div>
       </section>
 
