@@ -62,6 +62,17 @@ const Games = () => {
       color: 'from-emerald-500 to-teal-400',
       features: ['Drag & drop gameplay', 'Progressive levels', 'Visual learning', 'Streak bonuses'],
       path: '/eco-match'
+    },
+    {
+      id: 'green-sweep',
+      title: 'Green Sweep',
+      description: 'A fast-paced arcade game where you clean up parks and sort waste correctly!',
+      icon: Zap,
+      difficulty: 'Easy-Medium',
+      duration: '3-5 min',
+      color: 'from-lime-500 to-green-400',
+      features: ['Fast-paced action', 'Waste sorting mechanics', 'Power-ups & obstacles', 'Educational facts'],
+      path: '/green-sweep'
     }
   ];
 

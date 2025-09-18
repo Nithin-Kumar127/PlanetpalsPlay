@@ -23,6 +23,7 @@ import ClimateSimulator from "./pages/ClimateSimulator";
 import Games from "./pages/Games";
 import CarbonCalculator from "./pages/CarbonCalculator";
 import EcoMatchGame from "./pages/EcoMatchGame";
+import GreenSweep from "./pages/GreenSweep";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,15 @@ const App = () => {
                 <Route path="/eco-match" element={
                   <ProtectedRoute>
                     <EcoMatchGame />
+                    <ChatBot 
+                      isOpen={isChatBotOpen} 
+                      onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
+                    />
+                  </ProtectedRoute>
+                } />
+                <Route path="/green-sweep" element={
+                  <ProtectedRoute>
+                    <GreenSweep />
                     <ChatBot 
                       isOpen={isChatBotOpen} 
                       onToggle={() => setIsChatBotOpen(!isChatBotOpen)} 
