@@ -150,6 +150,19 @@ All colors MUST be HSL.
     animation: float-slow 6s ease-in-out infinite;
   }
 
+  @keyframes bounce-very-slow {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .animate-bounce-very-slow {
+    animation: bounce-very-slow 4s ease-in-out infinite;
+  }
+
   /* Smooth scrolling */
   html {
     scroll-behavior: smooth;

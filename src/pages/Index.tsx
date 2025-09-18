@@ -63,7 +63,7 @@ const Index = () => {
               </p>
               <Button 
                 size="lg" 
-                className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg hover:scale-102 transition-all duration-700 shadow-lg hover:shadow-xl"
+                className="bg-white text-nature-primary hover:bg-white/90 font-semibold px-8 py-4 text-lg hover:scale-102 transition-all duration-700 shadow-lg hover:shadow-xl animate-bounce-very-slow"
                 onClick={() => navigate("/games")}
               >
                 Start Learning <Leaf className="ml-2 h-5 w-5" />
