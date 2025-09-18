@@ -24,10 +24,11 @@ export const LearningPathway = ({ completedLessons }: PathwayProps) => {
   const isStepUnlocked = (stepId: number) => {
     if (stepId === 1) return true;
     
-    const previousStep = pathwaySteps.find(s => s.id === stepId - 1);
-    if (!previousStep) return false;
+    const previousCategory = lessonCategories.find(c => c.id === stepId - 1);
+    if (!previousCategory) return false;
     
-    return previousStep.lessons.every(lessonId => completedLessons.includes(lessonId));
+    const previousCategoryLessons = lessons.filter(l => l.category_id === previousCategory.id);
+    return previousCategoryLessons.every(lesson => completedLessons.includes(lesson.id));
   };
 
   const pathwaySteps = lessonCategories.map(category => {
