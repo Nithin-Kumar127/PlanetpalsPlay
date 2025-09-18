@@ -170,11 +170,22 @@ All colors MUST be HSL.
 
   /* Hide default cursor everywhere */
   *, *::before, *::after {
-    cursor: none !important;
+    cursor: none;
   }
 
   /* Ensure custom cursor is visible on all interactive elements */
-  button, a, [role="button"], input, textarea, select, [data-radix-collection-item] {
-    cursor: none !important;
+  button, a, [role="button"], input, textarea, select, [data-radix-collection-item], 
+  [data-radix-dialog-content], [data-radix-dialog-content] *, 
+  .chatbot-container, .chatbot-container * {
+    cursor: none;
+  }
+
+  /* Allow normal cursor in specific chatbot areas where custom cursor might not work well */
+  .chatbot-input-area input, .chatbot-input-area textarea {
+    cursor: text;
+  }
+
+  .chatbot-scroll-area {
+    cursor: auto;
   }
 }

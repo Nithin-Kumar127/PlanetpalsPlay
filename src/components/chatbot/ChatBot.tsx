@@ -139,7 +139,7 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
   }
 
   return (
-    <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col">
+    <Card className="fixed bottom-6 right-6 w-96 h-[500px] shadow-2xl z-50 flex flex-col chatbot-container">
       <CardHeader className="bg-gradient-to-r from-nature-primary to-nature-secondary text-white rounded-t-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -163,7 +163,7 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col p-0">
-        <ScrollArea className="flex-1 p-4 max-h-[350px]">
+        <ScrollArea className="flex-1 p-4 max-h-[350px] chatbot-scroll-area">
           <div className="space-y-4">
             {messages.map((message) => (
               <div
@@ -237,7 +237,7 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
         )}
 
         {/* Input Area */}
-        <div className="p-4 border-t">
+        <div className="p-4 border-t chatbot-input-area">
           <div className="flex space-x-2">
             <Input
               value={inputValue}
@@ -248,12 +248,13 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
                   handleSendMessage(inputValue)
                 }
               }}
-              className="flex-1"
+              className="flex-1 cursor-text"
             />
             <Button
               onClick={() => handleSendMessage(inputValue)}
               disabled={!inputValue.trim() || isTyping}
               size="icon"
+              className="cursor-pointer"
             >
               <Send className="h-4 w-4" />
             </Button>
