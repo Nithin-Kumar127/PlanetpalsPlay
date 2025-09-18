@@ -33,6 +33,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const sessionData = localStorage.getItem('mockSession')
         if (sessionData) {
           const session = JSON.parse(sessionData)
+          
+          // Validate that user ID is a proper UUID format
+          const userId = session.user?.id
+          if (!userId || typeof userId !== 'string' || userId.length < 32 || !userId.includes('-')) {
+            console.log('Invalid user ID format, clearing session:', userId)
+            localStorage.removeItem('mockSession')
+            return false
+          }
+          
           console.log('Found existing session:', session.user.email)
           setUser(session.user)
           setLoading(false)
