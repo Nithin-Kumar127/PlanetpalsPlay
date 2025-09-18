@@ -21,7 +21,7 @@ interface Question {
 const Game = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { recordQuizAttempt } = useLearning();
+  const { recordQuizAttempt, updateGameScore } = useLearning();
   
   const [gameState, setGameState] = useState<'menu' | 'playing' | 'finished'>('menu');
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -191,12 +191,19 @@ const Game = () => {
   const finishGame = async () => {
     setGameState('finished');
     
-    // Record quiz attempt in database
+    // Calculate correct answers based on actual game state
     const correctAnswers = gameQuestions.reduce((count, question, index) => {
-      // This is simplified - in a real implementation, you'd track each answer
-      return count + (Math.random() > 0.3 ? 1 : 0); // Mock correct answers
+      // For now, estimate based on score (this should be tracked properly in real implementation)
+      return Math.round((score / (gameQuestions.length * 20)) * gameQuestions.length);
     }, 0);
     
+    // Calculate XP earned based on score
+    const xpEarned = Math.floor(score / 10);
+    
+    // Update game score and XP
+    await updateGameScore('Climate Quiz', score, xpEarned);
+    
+    // Record quiz attempt
     await recordQuizAttempt(
       gameMode,
       score,

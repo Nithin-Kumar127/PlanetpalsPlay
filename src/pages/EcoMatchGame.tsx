@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface GameItem {
   id: string;
@@ -41,6 +42,7 @@ interface GameState {
 const EcoMatchGame = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { updateGameScore } = useLearning();
   const dragRef = useRef<HTMLDivElement>(null);
 
   const [gameState, setGameState] = useState<GameState>({
@@ -231,6 +233,10 @@ const EcoMatchGame = () => {
 
   const endGame = () => {
     setGameState(prev => ({ ...prev, gameOver: true, gameStarted: false }));
+    
+    // Award XP based on performance
+    const xpEarned = Math.floor(gameState.score / 10);
+    updateGameScore('Eco Match', gameState.score, xpEarned);
     
     toast({
       title: gameState.lives <= 0 ? "Game Over! 💔" : "Time's Up! ⏰",

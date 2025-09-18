@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface CarbonData {
   transport: number;
@@ -28,6 +29,7 @@ interface GameState {
 const CarbonCalculator = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { updateGameScore } = useLearning();
 
   const [gameState, setGameState] = useState<GameState>({
     started: false,
@@ -142,6 +144,10 @@ const CarbonCalculator = () => {
     // Calculate score (lower footprint = higher score)
     const globalAverage = 4000; // kg CO2 per year
     const score = Math.max(0, Math.round((globalAverage - total) / globalAverage * 100));
+    
+    // Award XP based on how eco-friendly the footprint is
+    const xpEarned = Math.max(10, Math.floor(score / 2));
+    updateGameScore('Carbon Calculator', score, xpEarned);
     
     // Generate recommendations
     const recommendations = [];

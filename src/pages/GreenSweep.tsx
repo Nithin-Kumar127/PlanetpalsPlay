@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface GameItem {
   id: string;
@@ -61,6 +62,7 @@ interface GameState {
 const GreenSweep = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { updateGameScore } = useLearning();
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>();
 
@@ -376,6 +378,10 @@ const GreenSweep = () => {
 
   const endGame = () => {
     setGameState(prev => ({ ...prev, gameOver: true, started: false }));
+    
+    // Award XP based on performance
+    const xpEarned = Math.floor(gameState.score / 15);
+    updateGameScore('Green Sweep', gameState.score, xpEarned);
     
     // Show educational fact
     const randomFact = educationalFacts[Math.floor(Math.random() * educationalFacts.length)];

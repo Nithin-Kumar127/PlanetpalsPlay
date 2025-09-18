@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface GameState {
   year: number;
@@ -42,6 +43,7 @@ interface Action {
 const ClimateSimulator = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { updateGameScore } = useLearning();
 
   const [gameState, setGameState] = useState<GameState>({
     year: 2024,
@@ -219,10 +221,17 @@ const ClimateSimulator = () => {
       } else if (newState.year >= 2050 && newState.temperature <= 1.5) {
         newState.gameOver = true;
         newState.score += 1000;
+        // Award XP for successful completion
+        const xpEarned = Math.floor(newState.score / 5);
+        updateGameScore('Climate Simulator', newState.score, xpEarned);
         toast({
           title: "Victory!",
           description: "You successfully kept global warming under 1.5°C by 2050!",
         });
+      } else if (newState.temperature >= 2.5) {
+        // Award some XP even for failure
+        const xpEarned = Math.floor(newState.score / 10);
+        updateGameScore('Climate Simulator', newState.score, xpEarned);
       }
 
       // Ensure values stay in bounds

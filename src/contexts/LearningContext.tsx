@@ -193,7 +193,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const loadUserProfile = () => {
     if (!user) return
 
-    const savedProfile = localStorage.getItem(`userProfile_${user.id}`)
+    const savedProfile = localStorage.getItem('userProfile')
     if (savedProfile) {
       setUserProfile(JSON.parse(savedProfile))
     } else {
@@ -213,14 +213,14 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updated_at: new Date().toISOString()
       }
       setUserProfile(newProfile)
-      localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(newProfile))
+      localStorage.setItem('userProfile', JSON.stringify(newProfile))
     }
   }
 
   const loadUserProgress = () => {
     if (!user) return
 
-    const savedProgress = localStorage.getItem(`userProgress_${user.id}`)
+    const savedProgress = localStorage.getItem('userProgress')
     if (savedProgress) {
       setUserProgress(JSON.parse(savedProgress))
     } else {
@@ -231,7 +231,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const loadUserAchievements = () => {
     if (!user) return
 
-    const savedAchievements = localStorage.getItem(`userAchievements_${user.id}`)
+    const savedAchievements = localStorage.getItem('userAchievements')
     if (savedAchievements) {
       setUserAchievements(JSON.parse(savedAchievements))
     } else {
@@ -326,7 +326,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (newAchievements.length > 0) {
       const updatedAchievements = [...currentAchievements, ...newAchievements]
       setUserAchievements(updatedAchievements)
-      localStorage.setItem(`userAchievements_${user?.id}`, JSON.stringify(updatedAchievements))
+      localStorage.setItem('userAchievements', JSON.stringify(updatedAchievements))
 
       // Award XP for achievements
       const achievementXP = newAchievements.reduce((total, ua) => total + (ua.achievement?.xp_reward || 0), 0)
@@ -339,7 +339,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           updated_at: new Date().toISOString()
         }
         setUserProfile(updatedProfile)
-        localStorage.setItem(`userProfile_${user?.id}`, JSON.stringify(updatedProfile))
+        localStorage.setItem('userProfile', JSON.stringify(updatedProfile))
       }
 
       // Show achievement notifications
@@ -384,7 +384,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
 
       setUserProgress(updatedProgress)
-      localStorage.setItem(`userProgress_${user.id}`, JSON.stringify(updatedProgress))
+      localStorage.setItem('userProgress', JSON.stringify(updatedProgress))
 
       // Update user profile
       const completedLessons = updatedProgress.filter(p => p.completed).length
@@ -402,7 +402,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       updatedProfile.current_level = Math.floor(updatedProfile.total_xp / 500) + 1
 
       setUserProfile(updatedProfile)
-      localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(updatedProfile))
+      localStorage.setItem('userProfile', JSON.stringify(updatedProfile))
 
       // Check for new achievements
       checkAchievements(updatedProfile, updatedProgress)
@@ -442,7 +442,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updatedProfile.current_level = Math.floor(updatedProfile.total_xp / 500) + 1
 
         setUserProfile(updatedProfile)
-        localStorage.setItem(`userProfile_${user.id}`, JSON.stringify(updatedProfile))
+        localStorage.setItem('userProfile', JSON.stringify(updatedProfile))
 
         // Check for new achievements
         checkAchievements(updatedProfile, userProgress)
@@ -484,6 +484,37 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     initializeData()
   }, [user])
 
+  const updateGameScore = async (gameType: string, score: number, xpEarned: number) => {
+    if (!user || !userProfile) return
+
+    try {
+      let updatedProfile = {
+        ...userProfile,
+        total_xp: userProfile.total_xp + xpEarned,
+        updated_at: new Date().toISOString()
+      }
+
+      // Update streak
+      updatedProfile = updateStreak(updatedProfile)
+      
+      // Calculate level
+      updatedProfile.current_level = Math.floor(updatedProfile.total_xp / 500) + 1
+
+      setUserProfile(updatedProfile)
+      localStorage.setItem('userProfile', JSON.stringify(updatedProfile))
+
+      // Check for new achievements
+      checkAchievements(updatedProfile, userProgress)
+
+      toast({
+        title: `${gameType} Complete! 🎉`,
+        description: `You earned ${xpEarned} XP! Score: ${score}`,
+      })
+    } catch (error) {
+      console.error('Error updating game score:', error)
+    }
+  }
+
   const value = {
     userProfile,
     lessonCategories,
@@ -494,6 +525,7 @@ export const LearningProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     loading,
     completeLesson,
     recordQuizAttempt,
+    updateGameScore,
     refreshData
   }
 

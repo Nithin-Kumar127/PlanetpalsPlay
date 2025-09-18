@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLearning } from "@/contexts/LearningContext";
 
 interface LeaderboardUser {
   id: string;
@@ -24,25 +25,23 @@ interface LeaderboardUser {
 const Leaderboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { userProfile } = useLearning();
   const [currentUserStats, setCurrentUserStats] = useState<LeaderboardUser | null>(null);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
 
   useEffect(() => {
-    // Get current user's completed lessons
-    const completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[]');
-    
-    // Create current user stats
+    // Create current user stats from learning context
     const userStats: LeaderboardUser = {
       id: user?.id || '1',
       name: user?.user_metadata?.name || 'Climate Learner',
       email: user?.email || 'you@example.com',
-      xp: 1250 + (completedLessons.length * 100), // Base XP + lesson XP
-      lessonsCompleted: completedLessons.length,
-      currentStreak: 7,
-      bestStreak: 15,
+      xp: userProfile?.total_xp || 0,
+      lessonsCompleted: userProfile?.lessons_completed || 0,
+      currentStreak: userProfile?.current_streak || 0,
+      bestStreak: userProfile?.best_streak || 0,
       joinDate: '2024-01-15',
-      level: Math.floor((1250 + (completedLessons.length * 100)) / 500) + 1,
-      achievements: completedLessons.length >= 1 ? (completedLessons.length >= 5 ? 3 : 2) : 1
+      level: userProfile?.current_level || 1,
+      achievements: userProfile?.achievements_earned || 0
     };
 
     setCurrentUserStats(userStats);

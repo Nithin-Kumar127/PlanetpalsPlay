@@ -10,77 +10,8 @@ import { useLearning } from "@/contexts/LearningContext";
 
 const Achievements = () => {
   const navigate = useNavigate();
+  const { userProfile, achievements, userAchievements, loading } = useLearning();
 
-  const achievements = [
-    { 
-      id: 1, 
-      name: "First Steps", 
-      description: "Complete your first lesson", 
-      icon: "BookOpen", 
-      xp_reward: 50
-    },
-    { 
-      id: 2, 
-      name: "Week Warrior", 
-      description: "7-day learning streak", 
-      icon: "Flame", 
-      xp_reward: 100
-    },
-    { 
-      id: 3, 
-      name: "Climate Champion", 
-      description: "Complete 50 lessons", 
-      icon: "Globe", 
-      xp_reward: 500
-    },
-    { 
-      id: 4, 
-      name: "Energy Expert", 
-      description: "Master renewable energy path", 
-      icon: "Zap", 
-      xp_reward: 300
-    },
-    { 
-      id: 5, 
-      name: "Perfect Score", 
-      description: "Get 100% on any lesson", 
-      icon: "Star", 
-      xp_reward: 200
-    },
-    { 
-      id: 6, 
-      name: "Waste Wizard", 
-      description: "Complete waste management path", 
-      icon: "Target", 
-      xp_reward: 300
-    },
-    { 
-      id: 7, 
-      name: "Streak Master", 
-      description: "30-day learning streak", 
-      icon: "Flame", 
-      xp_reward: 1000
-    },
-    { 
-      id: 8, 
-      name: "Knowledge Seeker", 
-      description: "Complete all learning paths", 
-      icon: "Award", 
-      xp_reward: 2000
-    }
-  ];
-
-  const userAchievements = [
-    { achievement_id: 1, earned_at: "2024-01-15" },
-    { achievement_id: 2, earned_at: "2024-01-22" }
-  ];
-
-  const userProfile = {
-    total_xp: 1250,
-    current_streak: 7
-  };
-
-  const loading = false;
 
   const earnedAchievements = achievements.filter(a => 
     userAchievements.some(ua => ua.achievement_id === a.id)
