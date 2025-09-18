@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User as SupabaseUser } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
 
 interface AuthContextType {
   user: SupabaseUser | null
@@ -18,6 +17,15 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
+}
+
+// Generate a proper UUID v4
+const generateUUID = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0
+    const v = c == 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -54,89 +62,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false
     }
 
-    // Get initial session
+    // Initialize auth without Supabase
     const initializeAuth = async () => {
-      // First check localStorage
+      // Check localStorage first
       if (checkExistingSession()) {
         return
       }
 
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession()
-        console.log('Initial session:', session, 'Error:', error)
-        
-        if (session?.user) {
-          setUser(session.user)
-          // Save session to localStorage
-          localStorage.setItem('mockSession', JSON.stringify(session))
-          console.log('User found in session:', session.user.email)
-        } else {
-          setUser(null)
-          console.log('No user in session')
-        }
-      } catch (error) {
-        console.error('Error getting initial session:', error)
-        setUser(null)
-      } finally {
-        setLoading(false)
-      }
+      setUser(null)
+      setLoading(false)
     }
 
     initializeAuth()
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state change:', event, session?.user?.email)
-        
-        try {
-          if (session?.user) {
-            setUser(session.user)
-            // Save session to localStorage
-            localStorage.setItem('mockSession', JSON.stringify(session))
-            console.log('User signed in:', session.user.email)
-          } else {
-            setUser(null)
-            // Remove session from localStorage
-            localStorage.removeItem('mockSession')
-            console.log('User signed out')
-          }
-        } catch (error) {
-          console.error('Error handling auth state change:', error)
-        } finally {
-          setLoading(false)
-        }
-      }
-    )
-
-    return () => {
-      console.log('AuthProvider: Cleaning up auth listener')
-      subscription.unsubscribe()
-    }
   }, [])
 
   const signUp = async (email: string, password: string, name: string) => {
-    console.log('AuthProvider: Attempting signup for:', email)
+    console.log('AuthProvider: Mock signup for:', email)
     setLoading(true)
+    
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Create mock user with proper UUID
+      const mockUser: SupabaseUser = {
+        id: generateUUID(),
         email,
-        password,
-        options: {
-          data: {
-            name: name
-          }
-        }
-      })
-      
-      if (error) {
-        console.error('Signup error:', error)
-        setLoading(false)
-        return { error }
+        user_metadata: { name },
+        app_metadata: {},
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        role: 'authenticated',
+        confirmation_sent_at: new Date().toISOString()
       }
+
+      const mockSession = {
+        user: mockUser,
+        access_token: 'mock-access-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 3600,
+        token_type: 'bearer'
+      }
+
+      // Save to localStorage
+      localStorage.setItem('mockSession', JSON.stringify(mockSession))
+      setUser(mockUser)
+      setLoading(false)
       
-      console.log('Signup successful:', data?.user?.email)
-      // Don't set loading to false here, let the auth state change handle it
+      console.log('Mock signup successful:', email)
       return { error: null }
     } catch (err) {
       console.error('Signup exception:', err)
@@ -146,22 +122,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signIn = async (email: string, password: string) => {
-    console.log('AuthProvider: Attempting signin for:', email)
+    console.log('AuthProvider: Mock signin for:', email)
     setLoading(true)
+    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Create mock user with proper UUID
+      const mockUser: SupabaseUser = {
+        id: generateUUID(),
         email,
-        password
-      })
-      
-      if (error) {
-        console.error('Signin error:', error)
-        setLoading(false)
-        return { error }
+        user_metadata: { name: 'Climate Learner' },
+        app_metadata: {},
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        role: 'authenticated',
+        confirmation_sent_at: new Date().toISOString()
       }
+
+      const mockSession = {
+        user: mockUser,
+        access_token: 'mock-access-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 3600,
+        token_type: 'bearer'
+      }
+
+      // Save to localStorage
+      localStorage.setItem('mockSession', JSON.stringify(mockSession))
+      setUser(mockUser)
+      setLoading(false)
       
-      console.log('Signin successful:', data?.user?.email)
-      // Don't set loading to false here, let the auth state change handle it
+      console.log('Mock signin successful:', email)
       return { error: null }
     } catch (err) {
       console.error('Signin exception:', err)
@@ -171,10 +167,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signOut = async () => {
-    console.log('AuthProvider: Attempting signout')
+    console.log('AuthProvider: Mock signout')
     try {
-      await supabase.auth.signOut()
-      console.log('Signout successful')
+      localStorage.removeItem('mockSession')
+      setUser(null)
+      console.log('Mock signout successful')
     } catch (err) {
       console.error('Signout error:', err)
     }
