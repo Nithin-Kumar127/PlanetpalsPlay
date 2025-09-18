@@ -180,12 +180,30 @@ All colors MUST be HSL.
     cursor: none;
   }
 
-  /* Allow normal cursor in specific chatbot areas where custom cursor might not work well */
-  .chatbot-input-area input, .chatbot-input-area textarea {
-    cursor: text;
+  /* Chatbot specific cursor overrides */
+  .chatbot-container {
+    cursor: auto !important;
   }
 
-  .chatbot-scroll-area {
-    cursor: auto;
+  .chatbot-container * {
+    cursor: auto !important;
+  }
+
+  .chatbot-container input,
+  .chatbot-container textarea {
+    cursor: text !important;
+  }
+
+  .chatbot-container button,
+  .chatbot-container [role="button"] {
+    cursor: pointer !important;
+  }
+
+  .chatbot-container .chatbot-scroll-area {
+    cursor: auto !important;
+  }
+
+  .chatbot-container .chatbot-scroll-area * {
+    cursor: auto !important;
   }
 }

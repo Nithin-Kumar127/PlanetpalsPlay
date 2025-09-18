@@ -248,13 +248,12 @@ export const ChatBot = ({ isOpen, onToggle }: ChatBotProps) => {
                   handleSendMessage(inputValue)
                 }
               }}
-              className="flex-1 cursor-text"
+              className="flex-1"
             />
             <Button
               onClick={() => handleSendMessage(inputValue)}
               disabled={!inputValue.trim() || isTyping}
               size="icon"
-              className="cursor-pointer"
             >
               <Send className="h-4 w-4" />
             </Button>

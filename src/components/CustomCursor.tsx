@@ -4,10 +4,16 @@ export const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
+  const [isInChatbot, setIsInChatbot] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
+      
+      // Check if mouse is over chatbot
+      const target = e.target as HTMLElement;
+      const chatbotContainer = target.closest('.chatbot-container');
+      setIsInChatbot(!!chatbotContainer);
     };
 
     const handleMouseEnter = (e: MouseEvent) => {
@@ -41,6 +47,11 @@ export const CustomCursor = () => {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
+
+  // Don't render custom cursor when in chatbot
+  if (isInChatbot) {
+    return null;
+  }
 
   return (
     <>
