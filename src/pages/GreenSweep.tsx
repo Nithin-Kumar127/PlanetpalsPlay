@@ -207,8 +207,8 @@ const GreenSweep = () => {
         emoji: obstacleType.emoji,
         x: Math.random() * 80 + 10,
         y: Math.random() * 80 + 10,
-        dx: (Math.random() - 0.5) * 2,
-        dy: (Math.random() - 0.5) * 2
+        dx: (Math.random() - 0.5) * 1.5,
+        dy: (Math.random() - 0.5) * 1.5
       });
     }
 
@@ -733,7 +733,7 @@ const GreenSweep = () => {
                   {gameState.obstacles.map(obstacle => (
                     <div
                       key={obstacle.id}
-                      className="absolute w-6 h-6 flex items-center justify-center"
+                      className="absolute w-6 h-6 flex items-center justify-center transition-all duration-150"
                       style={{
                         left: `${obstacle.x}%`,
                         top: `${obstacle.y}%`,
