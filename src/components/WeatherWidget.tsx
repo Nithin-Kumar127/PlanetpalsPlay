@@ -25,7 +25,7 @@ export const WeatherWidget = () => {
   // Mock weather data for demo purposes
   const mockWeatherData: WeatherData[] = [
     {
-      location: "New York, NY",
+      location: "New York City, NY, USA",
       temperature: 22,
       condition: "Partly Cloudy",
       humidity: 65,
@@ -35,7 +35,7 @@ export const WeatherWidget = () => {
       description: "A pleasant day with some clouds"
     },
     {
-      location: "London, UK",
+      location: "London, England, UK",
       temperature: 15,
       condition: "Rainy",
       humidity: 85,
@@ -45,7 +45,7 @@ export const WeatherWidget = () => {
       description: "Light rain throughout the day"
     },
     {
-      location: "Tokyo, Japan",
+      location: "Tokyo, Kanto, Japan",
       temperature: 28,
       condition: "Sunny",
       humidity: 55,
@@ -55,7 +55,7 @@ export const WeatherWidget = () => {
       description: "Clear skies and warm weather"
     },
     {
-      location: "Sydney, Australia",
+      location: "Sydney, NSW, Australia",
       temperature: 18,
       condition: "Cloudy",
       humidity: 70,
@@ -65,7 +65,7 @@ export const WeatherWidget = () => {
       description: "Overcast with cool temperatures"
     },
     {
-      location: "Mumbai, India",
+      location: "Mumbai, Maharashtra, India",
       temperature: 32,
       condition: "Hot",
       humidity: 78,
@@ -73,6 +73,26 @@ export const WeatherWidget = () => {
       visibility: 12,
       feelsLike: 38,
       description: "Hot and humid conditions"
+    },
+    {
+      location: "Chennai, Tamil Nadu, India",
+      temperature: 34,
+      condition: "Hot",
+      humidity: 82,
+      windSpeed: 6,
+      visibility: 10,
+      feelsLike: 39,
+      description: "Hot and humid coastal weather"
+    },
+    {
+      location: "Tambaram, Chennai, Tamil Nadu",
+      temperature: 33,
+      condition: "Partly Cloudy",
+      humidity: 75,
+      windSpeed: 8,
+      visibility: 12,
+      feelsLike: 37,
+      description: "Warm suburban weather with some clouds"
     }
   ];
 
