@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Trophy, Medal, Award, Crown, Zap, BookOpen, Flame, TrendingUp } from "lucide-react";
+import { ArrowLeft, Trophy, Medal, Award, Crown, Zap, BookOpen, Flame, TrendingUp, Target, Star, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -89,10 +89,10 @@ const Achievements = () => {
   const iconMap: { [key: string]: any } = {
     BookOpen,
     Flame,
-    Globe: Award,
+    Globe,
     Zap,
-    Star: Award,
-    Target: Award,
+    Star,
+    Target,
     Award,
     Trophy
   };
