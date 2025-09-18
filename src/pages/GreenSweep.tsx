@@ -207,8 +207,8 @@ const GreenSweep = () => {
         emoji: obstacleType.emoji,
         x: Math.random() * 80 + 10,
         y: Math.random() * 80 + 10,
-        dx: (Math.random() - 0.5) * 2,
-        dy: (Math.random() - 0.5) * 2
+        dx: (Math.random() - 0.5) * 1.5,
+        dy: (Math.random() - 0.5) * 1.5
       });
     }
 
@@ -245,6 +245,7 @@ const GreenSweep = () => {
       newState.obstacles = newState.obstacles.map(obstacle => {
         // Reduced obstacle speed by 50% for smoother movement
         let newX = obstacle.x + (obstacle.dx * 0.5);
+        let newY = obstacle.y + (obstacle.dy * 0.5);
         let newY = obstacle.y + (obstacle.dy * 0.5);
         let newDx = obstacle.dx;
         let newDy = obstacle.dy;
@@ -331,8 +332,12 @@ const GreenSweep = () => {
 
         // Reduced collision distance for more forgiving gameplay
         if (distance < 4) {
+        if (distance < 4) {
           newState.lives--;
           newState.streak = 0;
+          // Move player away from obstacle
+          newState.playerX = 50;
+          newState.playerY = 50;
           // Move player away from obstacle
           newState.playerX = 50;
           newState.playerY = 50;
@@ -735,7 +740,7 @@ const GreenSweep = () => {
                   {gameState.obstacles.map(obstacle => (
                     <div
                       key={obstacle.id}
-                      className="absolute w-6 h-6 flex items-center justify-center"
+                      className="absolute w-6 h-6 flex items-center justify-center transition-all duration-150"
                       style={{
                         left: `${obstacle.x}%`,
                         top: `${obstacle.y}%`,
