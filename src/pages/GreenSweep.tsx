@@ -207,8 +207,8 @@ const GreenSweep = () => {
         emoji: obstacleType.emoji,
         x: Math.random() * 80 + 10,
         y: Math.random() * 80 + 10,
-        dx: (Math.random() - 0.5) * 1.5,
-        dy: (Math.random() - 0.5) * 1.5
+        dx: (Math.random() - 0.5) * 2,
+        dy: (Math.random() - 0.5) * 2
       });
     }
 
@@ -241,11 +241,10 @@ const GreenSweep = () => {
       if (newState.speedBoost > 0) newState.speedBoost--;
       if (newState.magnetActive > 0) newState.magnetActive--;
 
-      // Move obstacles (slower and smoother)
+      // Move obstacles
       newState.obstacles = newState.obstacles.map(obstacle => {
-        // Reduced obstacle speed by 50% for smoother movement
-        let newX = obstacle.x + (obstacle.dx * 0.5);
-        let newY = obstacle.y + (obstacle.dy * 0.5);
+        let newX = obstacle.x + obstacle.dx;
+        let newY = obstacle.y + obstacle.dy;
         let newDx = obstacle.dx;
         let newDy = obstacle.dy;
 
@@ -323,14 +322,13 @@ const GreenSweep = () => {
         return powerUp;
       });
 
-      // Check collisions with obstacles (more forgiving collision detection)
+      // Check collisions with obstacles
       newState.obstacles.forEach(obstacle => {
         const distance = Math.sqrt(
           Math.pow(obstacle.x - newState.playerX, 2) + Math.pow(obstacle.y - newState.playerY, 2)
         );
 
-        // Reduced collision distance for more forgiving gameplay
-        if (distance < 4) {
+        if (distance < 5) {
           newState.lives--;
           newState.streak = 0;
           // Move player away from obstacle
@@ -689,7 +687,9 @@ const GreenSweep = () => {
                 >
                   {/* Player */}
                   <div
-                    className={`absolute w-8 h-8 bg-gradient-to-br from-lime-400 to-green-500 rounded-full flex items-center justify-center text-white font-bold transition-all duration-100 ${gameState.magnetActive > 0 ? 'ring-4 ring-pink-300' : ''}`}
+                    className={`absolute w-8 h-8 bg-gradient-to-br from-lime-400 to-green-500 rounded-full flex items-center justify-center text-white font-bold transition-all duration-100 ${
+                      gameState.speedBoost > 0 ? 'animate-pulse' : ''
+                    } ${gameState.magnetActive > 0 ? 'ring-4 ring-pink-300' : ''}`}
                     style={{
                       left: `${gameState.playerX}%`,
                       top: `${gameState.playerY}%`,
@@ -703,7 +703,7 @@ const GreenSweep = () => {
                   {gameState.items.filter(item => !item.collected).map(item => (
                     <div
                       key={item.id}
-                      className="absolute w-6 h-6 flex items-center justify-center transition-all duration-150"
+                      className="absolute w-6 h-6 flex items-center justify-center animate-bounce-gentle"
                       style={{
                         left: `${item.x}%`,
                         top: `${item.y}%`,
@@ -733,7 +733,7 @@ const GreenSweep = () => {
                   {gameState.obstacles.map(obstacle => (
                     <div
                       key={obstacle.id}
-                      className="absolute w-6 h-6 flex items-center justify-center transition-all duration-150"
+                      className="absolute w-6 h-6 flex items-center justify-center"
                       style={{
                         left: `${obstacle.x}%`,
                         top: `${obstacle.y}%`,
